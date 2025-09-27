@@ -1,0 +1,417 @@
+openapi: 3.1.0
+info:
+  title: MCPX-KendoBridge MCP Proxy API
+  version: 2.0.0
+  summary: >
+    Streamable-HTTP + SSE transport for bridging Remote MCP clients to the Telerik
+    KendoReact MCP (STDIO) child process via a .NET 8 web API.
+  description: |
+    **Purpose.** Provide a remote MCP server over HTTP/Streamable-HTTP that spawns and bridges
+    the Telerik KendoReact MCP server (STDIO). Transport supports JSON responses
+    and Server-Sent Events (SSE) for incremental output.
+
+    **Guardrails.**
+    - **No-Hard-Coding:** All dynamic values (child command/args/cwd, timeouts, keep-alive, Origin allow-list)
+      are DB-driven and surfaced to the app via stored procedures (`sp_Config_*`, `sp_Feature_IsEnabled`, `sp_Lookup_Get`).
+      Secrets are never returned by this API and are configured in environment stores (GitHub Environments).  
+    - **SP-only / add-only:** App uses **EXECUTE-only** permissions on SPs; schema migration is forward/add-only.
+
+    **Streaming.**
+    - `POST /mcp` returns **JSON** by default; if the client sets `Accept: text/event-stream`, the endpoint streams SSE frames:
+      `event: message`, incremental `id` values, and `:` heartbeat comments every `Network:SseKeepAliveSeconds` seconds.
+    - `GET /mcp` opens an SSE channel for **background notifications** for a given session (requires `Mcp-Session-Id` header).
+
+    **Legacy (feature-flagged).**
+    - `/messages` and `/sse` provide HTTP+SSE compatibility semantics when the `EnableLegacyHttpSse` feature flag is **on**;
+      otherwise these endpoints return `403 feature_disabled`.
+
+servers:
+  - url: https://alpha.example.com/api
+    description: Alpha
+  - url: https://beta.example.com/api
+    description: Beta
+  - url: https://rtm.example.com/api
+    description: RTM (validates against Prod DB read-only)
+  - url: https://prod.example.com/api
+    description: Prod
+
+tags:
+  - name: Transport
+    description: Primary streaming and JSON endpoints for MCP
+  - name: Health
+    description: Liveness and readiness
+  - name: Operations
+    description: Read-only operational surfaces (non-secret)
+  - name: Legacy
+    description: Feature-flagged compatibility endpoints
+
+security:
+  - bearerAuth: []  # Platform-provided bearer; may be enforced at gateway
+
+paths:
+  /mcp:
+    post:
+      tags: [Transport]
+      summary: Process one JSON-RPC 2.0 message (JSON or SSE)
+      description: |
+        Accepts one JSON-RPC 2.0 request and forwards it to the session's child STDIO process.
+
+        **Content negotiation**
+        - Default: `application/json` (opaque JSON-RPC response)
+        - Streaming: set `Accept: text/event-stream` to receive SSE frames:
+          - `event: message` frames with incremental `id` values
+          - heartbeat comments `: <ts>` every `Network:SseKeepAliveSeconds` seconds (DB-sourced)
+      operationId: postMcp
+      parameters:
+        - $ref: '#/components/parameters/McpSessionIdHeaderOptional'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonRpcRequest'
+            examples:
+              ping:
+                summary: JSON-RPC ping
+                value: { jsonrpc: "2.0", id: "1", method: "ping", params: {} }
+              streamedPing:
+                summary: Streamed tool call (client also sets Accept: text/event-stream)
+                value: { jsonrpc: "2.0", id: "9", method: "ping", params: { stream: true } }
+      responses:
+        '200':
+          description: JSON response or SSE stream depending on Accept header.
+          headers:
+            Mcp-Session-Id:
+              $ref: '#/components/headers/Mcp-Session-Id'
+            MCP-Protocol-Version:
+              $ref: '#/components/headers/MCP-Protocol-Version'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonRpcResponse'
+              examples:
+                jsonOk:
+                  summary: Opaque JSON-RPC response from child
+                  value: { jsonrpc: "2.0", id: "9", result: { ok: true } }
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/SseStream'
+              examples:
+                streamedMessages:
+                  summary: Streamed response with heartbeats
+                  value: |
+                    : 2025-09-27T12:00:00Z
+                    event: message
+                    id: 1
+                    data: {"jsonrpc":"2.0","id":"9","result":{"partial":true}}
+                    
+                    : 2025-09-27T12:00:15Z
+                    event: message
+                    id: 2
+                    data: {"jsonrpc":"2.0","id":"9","result":{"final":true}}
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '408': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }  # future: rate limit
+        '500': { $ref: '#/components/responses/Error' }
+        '502': { $ref: '#/components/responses/Error' }
+        '503': { $ref: '#/components/responses/Error' }
+
+    get:
+      tags: [Transport]
+      summary: Open SSE channel for background notifications
+      description: |
+        Opens an SSE subscription for **server-initiated** notifications for the provided
+        `Mcp-Session-Id`. The stream emits heartbeat comments `:` on the configured cadence.
+      operationId: getMcpStream
+      parameters:
+        - $ref: '#/components/parameters/McpSessionIdHeaderRequired'
+      responses:
+        '200':
+          description: Server-Sent Events (SSE) stream for background notifications
+          headers:
+            MCP-Protocol-Version:
+              $ref: '#/components/headers/MCP-Protocol-Version'
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/SseStream'
+              examples:
+                notifications:
+                  summary: Notification example
+                  value: |
+                    : 2025-09-27T12:00:00Z
+                    event: message
+                    id: 1
+                    data: {"jsonrpc":"2.0","method":"notify","params":{"message":"background"}}
+        '400': { $ref: '#/components/responses/Error' }   # missing_session_id
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+
+  /messages:
+    post:
+      tags: [Legacy]
+      summary: Legacy JSON endpoint (feature-flagged)
+      description: |
+        Compatibility endpoint available only when `EnableLegacyHttpSse` is **true**.
+        Returns `403 feature_disabled` otherwise.
+      operationId: postMessagesLegacy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/JsonRpcRequest' }
+      responses:
+        '200':
+          description: Opaque JSON-RPC response
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JsonRpcResponse' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+
+  /sse:
+    get:
+      tags: [Legacy]
+      summary: Legacy SSE endpoint (feature-flagged)
+      description: |
+        Compatibility event stream available only when `EnableLegacyHttpSse` is **true**.
+        Returns `403 feature_disabled` otherwise.
+      operationId: getSseLegacy
+      parameters:
+        - $ref: '#/components/parameters/McpSessionIdHeaderRequired'
+      responses:
+        '200':
+          description: Legacy SSE stream
+          content:
+            text/event-stream:
+              schema: { $ref: '#/components/schemas/SseStream' }
+        '401': { $ref: '#/components/responses/Error' }
+        '403': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+
+  /healthz:
+    get:
+      tags: [Health]
+      summary: Liveness probe
+      operationId: getHealthz
+      responses:
+        '200':
+          description: Liveness OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Health' }
+              examples:
+                ok:
+                  value: { status: "ok", uptimeSeconds: 12345, sessionCount: 3, childProcesses: 3 }
+        '500':
+          $ref: '#/components/responses/Error'
+
+  /ready:
+    get:
+      tags: [Health]
+      summary: Readiness probe
+      description: |
+        Readiness includes DB SP reachability and (optionally) a child spawn probe.
+        In RTM, this endpoint validates against the **Prod DB (read-only)**.
+      operationId: getReady
+      responses:
+        '200':
+          description: Ready
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Ready' }
+              examples:
+                ready:
+                  value: { status: "ok", uptimeSeconds: 54321, sessionCount: 5, childProcesses: 5 }
+        '503':
+          $ref: '#/components/responses/Error'   # not_ready
+
+  /config/effective:
+    get:
+      tags: [Operations]
+      summary: Effective runtime configuration (non-secret)
+      description: |
+        Returns **non-secret** key/value pairs that drive runtime behavior. Secrets are
+        never included in this surface.
+      operationId: getConfigEffective
+      responses:
+        '200':
+          description: Non-secret configuration snapshot
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ConfigEffective' }
+              examples:
+                example:
+                  value:
+                    Mcp:ChildCommand: "npx"
+                    Mcp:ChildArgs: "-y @progress/kendo-react-mcp@latest"
+                    Mcp:ChildCwd: ""
+                    Security:AllowedOrigins: "https://chat.openai.com,https://platform.openai.com"
+                    Network:SseKeepAliveSeconds: "15"
+                    Network:RequestTimeoutSeconds: "120"
+        '401': { $ref: '#/components/responses/Error' }
+        '500': { $ref: '#/components/responses/Error' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    McpSessionIdHeaderOptional:
+      name: Mcp-Session-Id
+      in: header
+      required: false
+      description: >
+        Session identifier; if omitted on first `POST /mcp`, the server issues one in the response
+        header and binds subsequent calls to that child process.
+      schema: { type: string, minLength: 1 }
+    McpSessionIdHeaderRequired:
+      name: Mcp-Session-Id
+      in: header
+      required: true
+      description: >
+        Session identifier required for `GET /mcp` (and legacy `GET /sse`) to open a session-scoped
+        notification stream.
+      schema: { type: string, minLength: 1 }
+
+  headers:
+    Mcp-Session-Id:
+      description: Server-issued or echoed session id binding the client to a dedicated child process.
+      schema: { type: string }
+    MCP-Protocol-Version:
+      description: Optional protocol version header for forward-compatibility.
+      schema: { type: string, example: "1.0" }
+
+  responses:
+    Error:
+      description: Error response using the stable error envelope.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorEnvelope' }
+          examples:
+            originForbidden:
+              summary: Disallowed Origin
+              value: { code: "origin_forbidden", message: "Origin not allowed", requestId: "req-abc123" }
+            timeout:
+              summary: Request Timeout
+              value: { code: "timeout", message: "The operation timed out", requestId: "req-xyz789" }
+            missingSessionId:
+              summary: Missing Mcp-Session-Id
+              value: { code: "missing_session_id", message: "Header Mcp-Session-Id is required", requestId: "req-123" }
+            featureDisabled:
+              summary: Legacy endpoints disabled
+              value: { code: "feature_disabled", message: "Endpoint disabled by feature flag", requestId: "req-456" }
+            notReady:
+              summary: Service not ready
+              value: { code: "not_ready", message: "Dependencies unavailable", requestId: "req-789" }
+            spawnFailed:
+              summary: Child spawn failure
+              value: { code: "spawn_failed", message: "Child start failure", requestId: "req-555" }
+            badGatewayChild:
+              summary: Child unavailable
+              value: { code: "bad_gateway_child_unavailable", message: "Child not available", requestId: "req-777" }
+            unauthorized:
+              summary: Unauthorized
+              value: { code: "unauthorized", message: "Unauthorized", requestId: "req-unauth" }
+            badRequest:
+              summary: Bad request / malformed JSON
+              value: { code: "bad_request", message: "Malformed request", requestId: "req-bad" }
+            rateLimited:
+              summary: (Future) rate limited
+              value: { code: "rate_limited", message: "Too many requests", requestId: "req-rl" }
+
+  schemas:
+    # -------- Core envelopes --------
+    ErrorEnvelope:
+      type: object
+      additionalProperties: false
+      required: [code, message]
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+          minLength: 1
+        requestId:
+          type: string
+          description: Optional correlation id echoed for diagnostics.
+    ErrorCode:
+      type: string
+      description: Canonical error code taxonomy (non-exhaustive).
+      enum:
+        - origin_forbidden
+        - missing_session_id
+        - feature_disabled
+        - timeout
+        - not_ready
+        - spawn_failed
+        - internal_error
+        - bad_gateway_child_unavailable
+        - unauthorized
+        - bad_request
+        - rate_limited
+
+    # -------- Health / readiness --------
+    Health:
+      type: object
+      additionalProperties: false
+      required: [status, uptimeSeconds, sessionCount, childProcesses]
+      properties:
+        status: { type: string, enum: [ok, fail] }
+        uptimeSeconds: { type: integer, minimum: 0 }
+        sessionCount: { type: integer, minimum: 0 }
+        childProcesses: { type: integer, minimum: 0 }
+
+    Ready:
+      allOf:
+        - $ref: '#/components/schemas/Health'
+      description: Same shape as Health; `status: ok` indicates readiness.
+
+    # -------- Config (non-secret) --------
+    ConfigEffective:
+      type: object
+      description: |
+        Non-secret configuration key/values. Secrets are never included.
+        Values are ultimately DB-driven (AppConfig/FeatureFlag via stored procedures).
+      additionalProperties:
+        type: string
+
+    # -------- JSON-RPC (opaque) --------
+    JsonRpcRequest:
+      type: object
+      description: JSON-RPC 2.0 request object (opaque `params` forwarded to child).
+      required: [jsonrpc, id, method]
+      properties:
+        jsonrpc: { type: string, const: "2.0" }
+        id:
+          description: Opaque id supplied by client.
+          oneOf:
+            - type: string
+            - type: integer
+        method: { type: string, minLength: 1 }
+        params: {}
+      unevaluatedProperties: true
+
+    JsonRpcResponse:
+      type: object
+      description: >
+        Opaque JSON-RPC response forwarded from child; may contain `result` or `error`
+        per JSON-RPC 2.0. The proxy does not alter payloads.
+      unevaluatedProperties: true
+
+    # -------- SSE --------
+    SseStream:
+      type: string
+      description: |
+        Server-Sent Events stream (`text/event-stream`) comprised of:
+        - heartbeat comment lines starting with `:` every configured interval
+        - `event: message` frames with monotonically increasing `id`
+        - `data: <JSON-RPC message or notification>`
+      x-streaming: true  # non-standard hint to indicate streaming semantics

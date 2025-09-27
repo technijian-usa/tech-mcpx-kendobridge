@@ -1,0 +1,9 @@
+{
+  "Mcp:ChildCommand": "npx",
+  "Mcp:ChildArgs": "-y @progress/kendo-react-mcp@latest",
+  "Mcp:ChildCwd": "",
+  "Security:AllowedOrigins": "https://chat.openai.com,https://platform.openai.com",
+  "Network:SseKeepAliveSeconds": "15",
+  "Network:RequestTimeoutSeconds": "120",
+  "EnableLegacyHttpSse": "0"
+}

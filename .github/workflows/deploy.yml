@@ -1,0 +1,147 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: "Container image (registry/repo:tag) to deploy"
+        required: true
+      notes:
+        description: "Release notes (optional, non-secret)"
+        required: false
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  API_ALPHA: https://alpha.example.com/api
+  API_BETA:  https://beta.example.com/api
+  API_RTM:   https://rtm.example.com/api    # RTM validates on Prod DB (read-only)
+  API_PROD:  https://prod.example.com/api
+
+jobs:
+  alpha:
+    name: Alpha
+    environment: alpha
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # IMPLEMENT: your platform login/rollout (kubectl/helm/az/eks/aks). No secrets in logs.
+      - name: Deploy to Alpha (placeholder)
+        run: |
+          echo "Deploying ${{ github.event.inputs.image }} to Alpha ..."
+          # ./scripts/deploy-alpha.sh ${{ github.event.inputs.image }}
+      - name: Health & Ready
+        run: |
+          curl -fsS $API_ALPHA/healthz | jq -S . > alpha-health.json
+          curl -fsS $API_ALPHA/ready   | jq -S . > alpha-ready.json
+      - name: Config snapshot (non-secret)
+        run: curl -fsS $API_ALPHA/config/effective | jq -S . > alpha-config.json
+      - name: SSE TTFB smoke (optional)
+        run: |
+          curl -N -sS -H 'Accept: text/event-stream' -H 'Mcp-Session-Id: deploy-smoke' \
+               -H 'Content-Type: application/json' \
+               -o /dev/null -w 'TTFB_MS=%{time_starttransfer}\n' \
+               -d '{"jsonrpc":"2.0","id":"ttfb","method":"ping","params":{"stream":true}}' \
+               $API_ALPHA/mcp | tee alpha-ttfb.txt
+      - name: Upload Alpha Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: alpha-evidence
+          path: |
+            alpha-health.json
+            alpha-ready.json
+            alpha-config.json
+            alpha-ttfb.txt
+
+  beta:
+    name: Beta
+    needs: alpha
+    environment: beta
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Beta (placeholder)
+        run: |
+          echo "Deploying ${{ github.event.inputs.image }} to Beta ..."
+          # ./scripts/deploy-beta.sh ${{ github.event.inputs.image }}
+      - name: Health & Ready
+        run: |
+          curl -fsS $API_BETA/healthz | jq -S . > beta-health.json
+          curl -fsS $API_BETA/ready   | jq -S . > beta-ready.json
+      - name: Config snapshot (non-secret)
+        run: curl -fsS $API_BETA/config/effective | jq -S . > beta-config.json
+      - name: Upload Beta Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: beta-evidence
+          path: |
+            beta-health.json
+            beta-ready.json
+            beta-config.json
+
+  rtm:
+    name: RTM (Prod DB read-only parity)
+    needs: beta
+    environment: rtm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Deploy to RTM (placeholder)
+        run: |
+          echo "Deploying ${{ github.event.inputs.image }} to RTM ..."
+          # ./scripts/deploy-rtm.sh ${{ github.event.inputs.image }}
+      - name: Health & Ready
+        run: |
+          curl -fsS $API_RTM/healthz | jq -S . > rtm-health.json
+          curl -fsS $API_RTM/ready   | jq -S . > rtm-ready.json
+      - name: Config snapshot (non-secret)
+        run: curl -fsS $API_RTM/config/effective | jq -S . > rtm-config.json
+      - name: Parity diff vs expected Prod (non-secret keys)
+        run: |
+          jq -S . expected-prod.json > prod-expected.json
+          diff -u prod-expected.json rtm-config.json | tee parity.diff || true
+          test ! -s parity.diff || (echo "❌ RTM↔Prod parity drift detected"; exit 1)
+      - name: Upload RTM Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: rtm-evidence
+          path: |
+            rtm-health.json
+            rtm-ready.json
+            rtm-config.json
+            parity.diff
+
+  prod:
+    name: Prod
+    needs: rtm
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Prod (placeholder)
+        run: |
+          echo "Deploying ${{ github.event.inputs.image }} to Prod ..."
+          # ./scripts/deploy-prod.sh ${{ github.event.inputs.image }}
+      - name: Health & Ready
+        run: |
+          curl -fsS $API_PROD/healthz | jq -S . > prod-health.json
+          curl -fsS $API_PROD/ready   | jq -S . > prod-ready.json
+      - name: Upload Prod Evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-evidence
+          path: |
+            prod-health.json
+            prod-ready.json
+
+# Compliance notes (doc only):
+# - RTM connects to Prod DB (read-only) to eliminate configuration drift.
+# - Dynamic values: No-Hard-Coding; read from DB via SPs; secrets live only in GitHub Environments. 
