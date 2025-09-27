@@ -1,0 +1,33 @@
+name: Repo Tree Index
+
+on:
+  push:
+    branches: [ "**" ]
+  workflow_dispatch: {}
+
+jobs:
+  build-tree:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate TREE.md
+        shell: bash
+        run: |
+          sudo apt-get update && sudo apt-get install -y tree
+          {
+            echo "# Repository File Index"
+            echo
+            echo "_Auto-generated on $(date -u +"%Y-%m-%dT%H:%M:%SZ")_"
+            echo
+            echo '```'
+            # Hide typical noise; keep adjust as you like
+            tree -a -I "node_modules|.git|dist|bin|obj|.DS_Store|*.lock" -F
+            echo '```'
+          } > TREE.md
+
+      - name: Commit TREE.md
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(repo): refresh TREE.md"
+          file_pattern: TREE.md
