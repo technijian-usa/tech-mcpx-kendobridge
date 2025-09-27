@@ -1,11 +1,19 @@
-name: DocX to Markdown mirror
+name: DocX to Markdown mirror (repo-wide)
 
 on:
   push:
+    # Mirror on any .docx change anywhere in the repo
     paths:
-      - 'docs/**/*.docx'
+      - '**/*.docx'
       - '.github/workflows/docx-to-md.yml'
   workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docx-to-md
+  cancel-in-progress: true
 
 jobs:
   convert:
@@ -20,22 +28,41 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc
 
-      - name: Convert .docx -> .md into docs-md/
+      - name: Convert .docx → .md into docs-md/ (preserve subpaths)
         shell: bash
         run: |
+          set -euo pipefail
+          shopt -s globstar nullglob
+
+          # Create target root
           mkdir -p docs-md
-          shopt -s globstar
-          for f in docs/**/*.docx; do
-            base="${f##docs/}"
-            out="docs-md/${base%.docx}.md"
+
+          # Find all tracked .docx files outside docs-md/ and .git/
+          mapfile -t DOCX < <(find . -type f \( -iname '*.docx' \) \
+            -not -path './docs-md/*' -not -path './.git/*' | sort)
+
+          # Convert each .docx to parallel docs-md/<path>.md
+          for f in "${DOCX[@]}"; do
+            rel="${f#./}"
+            out="docs-md/${rel%.docx}.md"
             mkdir -p "$(dirname "$out")"
-            pandoc "$f" -f docx -t gfm -o "$out"
-            # add a header with source reference
-            sed -i "1i> _Source: $f_\n" "$out"
+            pandoc "$f" -f docx -t gfm --wrap=none -o "$out"
+            # Prepend source reference header
+            printf "> _Source: %s_\n\n" "$rel" | cat - "$out" > "$out.tmp" && mv "$out.tmp" "$out"
           done
 
-      - name: Commit Markdown mirror
+          # Remove orphaned mirrors (no corresponding .docx anymore)
+          mapfile -t MD < <(find docs-md -type f -iname '*.md' | sort)
+          for m in "${MD[@]}"; do
+            rel="${m#docs-md/}"
+            src="${rel%.md}.docx"
+            if [[ ! -f "$src" ]]; then
+              rm -f "$m"
+            fi
+          done
+
+      - name: Commit Markdown mirrors
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(docs): mirror .docx → Markdown"
+          commit_message: "chore(docs-md): mirror .docx → .md repo-wide"
           file_pattern: docs-md/**
