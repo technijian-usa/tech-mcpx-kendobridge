@@ -1,0 +1,1812 @@
+ Volume in drive C is OS
+ Volume Serial Number is 864A-9D81
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge
+
+09/27/2025  02:14 PM    <DIR>          .
+09/27/2025  01:06 PM    <DIR>          ..
+09/27/2025  01:18 PM    <DIR>          .github
+09/27/2025  01:18 PM    <DIR>          adr
+09/27/2025  01:18 PM    <DIR>          api
+09/27/2025  01:18 PM    <DIR>          config
+09/27/2025  01:16 PM                 2 CONTRIBUTING.md
+09/27/2025  01:18 PM    <DIR>          db
+09/27/2025  01:18 PM    <DIR>          design
+09/27/2025  02:00 PM    <DIR>          docs
+09/27/2025  02:15 PM                 0 filelist.txt
+09/27/2025  01:16 PM                 2 LICENSE
+09/27/2025  01:16 PM                 2 README.md
+09/27/2025  01:18 PM    <DIR>          runbooks
+09/27/2025  01:18 PM    <DIR>          tests
+09/27/2025  01:18 PM    <DIR>          web
+               4 File(s)              6 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git
+
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  02:00 PM                21 COMMIT_EDITMSG
+09/27/2025  01:06 PM               377 config
+09/27/2025  01:06 PM                73 description
+09/27/2025  02:01 PM               115 FETCH_HEAD
+09/27/2025  01:06 PM                21 HEAD
+09/27/2025  01:07 PM    <DIR>          hooks
+09/27/2025  02:00 PM            18,144 index
+09/27/2025  01:07 PM    <DIR>          info
+09/27/2025  01:20 PM    <DIR>          logs
+09/27/2025  02:01 PM    <DIR>          objects
+09/27/2025  01:18 PM    <DIR>          refs
+               6 File(s)         18,751 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\hooks
+
+09/27/2025  01:07 PM    <DIR>          .
+09/27/2025  01:06 PM               478 applypatch-msg.sample
+09/27/2025  01:06 PM               896 commit-msg.sample
+09/27/2025  01:06 PM             4,726 fsmonitor-watchman.sample
+09/27/2025  01:06 PM               189 post-update.sample
+09/27/2025  01:06 PM               424 pre-applypatch.sample
+09/27/2025  01:06 PM             1,649 pre-commit.sample
+09/27/2025  01:06 PM               416 pre-merge-commit.sample
+09/27/2025  01:06 PM             1,374 pre-push.sample
+09/27/2025  01:06 PM             4,898 pre-rebase.sample
+09/27/2025  01:06 PM               544 pre-receive.sample
+09/27/2025  01:06 PM             1,492 prepare-commit-msg.sample
+09/27/2025  01:06 PM             2,783 push-to-checkout.sample
+09/27/2025  01:06 PM             2,308 sendemail-validate.sample
+09/27/2025  01:06 PM             3,650 update.sample
+              14 File(s)         25,827 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\info
+
+09/27/2025  01:07 PM    <DIR>          .
+09/27/2025  01:06 PM               240 exclude
+               1 File(s)            240 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\logs
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:00 PM               575 HEAD
+09/27/2025  01:20 PM    <DIR>          refs
+               1 File(s)            575 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\logs\refs
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  01:20 PM    <DIR>          ..
+09/27/2025  01:20 PM    <DIR>          heads
+09/27/2025  01:20 PM    <DIR>          remotes
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\logs\refs\heads
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  01:20 PM    <DIR>          ..
+09/27/2025  02:00 PM               575 main
+               1 File(s)            575 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\logs\refs\remotes
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  01:20 PM    <DIR>          ..
+09/27/2025  01:20 PM    <DIR>          origin
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\logs\refs\remotes\origin
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  01:20 PM    <DIR>          ..
+09/27/2025  02:01 PM               612 HEAD
+09/27/2025  02:01 PM               537 main
+               2 File(s)          1,149 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects
+
+09/27/2025  02:01 PM    <DIR>          .
+09/27/2025  02:00 PM    <DIR>          00
+09/27/2025  01:20 PM    <DIR>          03
+09/27/2025  01:20 PM    <DIR>          04
+09/27/2025  02:00 PM    <DIR>          07
+09/27/2025  01:20 PM    <DIR>          0a
+09/27/2025  01:20 PM    <DIR>          0b
+09/27/2025  02:00 PM    <DIR>          0c
+09/27/2025  01:20 PM    <DIR>          0e
+09/27/2025  01:20 PM    <DIR>          11
+09/27/2025  01:20 PM    <DIR>          13
+09/27/2025  02:00 PM    <DIR>          14
+09/27/2025  01:20 PM    <DIR>          15
+09/27/2025  02:00 PM    <DIR>          16
+09/27/2025  01:20 PM    <DIR>          18
+09/27/2025  01:20 PM    <DIR>          19
+09/27/2025  02:00 PM    <DIR>          1f
+09/27/2025  01:20 PM    <DIR>          22
+09/27/2025  01:20 PM    <DIR>          24
+09/27/2025  01:20 PM    <DIR>          27
+09/27/2025  01:20 PM    <DIR>          2a
+09/27/2025  01:20 PM    <DIR>          2c
+09/27/2025  01:20 PM    <DIR>          2d
+09/27/2025  01:20 PM    <DIR>          30
+09/27/2025  01:20 PM    <DIR>          31
+09/27/2025  02:00 PM    <DIR>          33
+09/27/2025  01:20 PM    <DIR>          34
+09/27/2025  01:20 PM    <DIR>          35
+09/27/2025  01:20 PM    <DIR>          36
+09/27/2025  02:00 PM    <DIR>          37
+09/27/2025  01:20 PM    <DIR>          38
+09/27/2025  01:20 PM    <DIR>          39
+09/27/2025  01:20 PM    <DIR>          3c
+09/27/2025  01:20 PM    <DIR>          3e
+09/27/2025  01:20 PM    <DIR>          3f
+09/27/2025  02:00 PM    <DIR>          40
+09/27/2025  01:20 PM    <DIR>          41
+09/27/2025  01:20 PM    <DIR>          42
+09/27/2025  01:20 PM    <DIR>          44
+09/27/2025  02:00 PM    <DIR>          46
+09/27/2025  01:20 PM    <DIR>          4a
+09/27/2025  02:00 PM    <DIR>          4b
+09/27/2025  01:20 PM    <DIR>          4c
+09/27/2025  01:20 PM    <DIR>          4e
+09/27/2025  01:20 PM    <DIR>          4f
+09/27/2025  01:20 PM    <DIR>          54
+09/27/2025  01:20 PM    <DIR>          55
+09/27/2025  01:20 PM    <DIR>          58
+09/27/2025  01:20 PM    <DIR>          59
+09/27/2025  01:20 PM    <DIR>          5b
+09/27/2025  01:20 PM    <DIR>          5c
+09/27/2025  01:20 PM    <DIR>          5d
+09/27/2025  01:20 PM    <DIR>          5f
+09/27/2025  02:00 PM    <DIR>          61
+09/27/2025  01:20 PM    <DIR>          62
+09/27/2025  01:20 PM    <DIR>          63
+09/27/2025  01:20 PM    <DIR>          64
+09/27/2025  01:20 PM    <DIR>          66
+09/27/2025  01:20 PM    <DIR>          68
+09/27/2025  01:20 PM    <DIR>          6b
+09/27/2025  01:20 PM    <DIR>          6c
+09/27/2025  02:00 PM    <DIR>          6d
+09/27/2025  01:20 PM    <DIR>          70
+09/27/2025  01:20 PM    <DIR>          72
+09/27/2025  01:20 PM    <DIR>          73
+09/27/2025  02:00 PM    <DIR>          75
+09/27/2025  01:20 PM    <DIR>          77
+09/27/2025  01:20 PM    <DIR>          79
+09/27/2025  02:00 PM    <DIR>          7c
+09/27/2025  01:20 PM    <DIR>          80
+09/27/2025  01:20 PM    <DIR>          83
+09/27/2025  01:20 PM    <DIR>          84
+09/27/2025  02:00 PM    <DIR>          85
+09/27/2025  02:00 PM    <DIR>          87
+09/27/2025  01:20 PM    <DIR>          88
+09/27/2025  01:20 PM    <DIR>          8a
+09/27/2025  01:20 PM    <DIR>          8b
+09/27/2025  02:00 PM    <DIR>          8c
+09/27/2025  01:20 PM    <DIR>          8f
+09/27/2025  01:20 PM    <DIR>          90
+09/27/2025  01:20 PM    <DIR>          93
+09/27/2025  02:00 PM    <DIR>          96
+09/27/2025  01:20 PM    <DIR>          97
+09/27/2025  01:20 PM    <DIR>          99
+09/27/2025  01:20 PM    <DIR>          9b
+09/27/2025  01:20 PM    <DIR>          9c
+09/27/2025  01:20 PM    <DIR>          9e
+09/27/2025  01:20 PM    <DIR>          a0
+09/27/2025  01:20 PM    <DIR>          a1
+09/27/2025  01:20 PM    <DIR>          a3
+09/27/2025  01:20 PM    <DIR>          a4
+09/27/2025  01:20 PM    <DIR>          a5
+09/27/2025  01:20 PM    <DIR>          a6
+09/27/2025  01:20 PM    <DIR>          a8
+09/27/2025  01:20 PM    <DIR>          a9
+09/27/2025  01:20 PM    <DIR>          aa
+09/27/2025  01:20 PM    <DIR>          ac
+09/27/2025  01:20 PM    <DIR>          ae
+09/27/2025  01:20 PM    <DIR>          b1
+09/27/2025  01:20 PM    <DIR>          b2
+09/27/2025  01:20 PM    <DIR>          b3
+09/27/2025  01:20 PM    <DIR>          b5
+09/27/2025  01:20 PM    <DIR>          b8
+09/27/2025  01:20 PM    <DIR>          ba
+09/27/2025  01:20 PM    <DIR>          bb
+09/27/2025  01:20 PM    <DIR>          bd
+09/27/2025  02:00 PM    <DIR>          bf
+09/27/2025  01:20 PM    <DIR>          c1
+09/27/2025  01:20 PM    <DIR>          c2
+09/27/2025  01:20 PM    <DIR>          c3
+09/27/2025  01:20 PM    <DIR>          c4
+09/27/2025  01:20 PM    <DIR>          c6
+09/27/2025  01:20 PM    <DIR>          c7
+09/27/2025  01:20 PM    <DIR>          c8
+09/27/2025  01:20 PM    <DIR>          ca
+09/27/2025  01:20 PM    <DIR>          cb
+09/27/2025  01:20 PM    <DIR>          d0
+09/27/2025  01:20 PM    <DIR>          d2
+09/27/2025  02:00 PM    <DIR>          d4
+09/27/2025  01:20 PM    <DIR>          d5
+09/27/2025  01:20 PM    <DIR>          d6
+09/27/2025  02:00 PM    <DIR>          d7
+09/27/2025  01:20 PM    <DIR>          d9
+09/27/2025  01:20 PM    <DIR>          de
+09/27/2025  01:20 PM    <DIR>          e1
+09/27/2025  01:20 PM    <DIR>          e2
+09/27/2025  01:20 PM    <DIR>          e4
+09/27/2025  01:20 PM    <DIR>          e5
+09/27/2025  01:20 PM    <DIR>          e6
+09/27/2025  01:20 PM    <DIR>          e7
+09/27/2025  01:20 PM    <DIR>          e9
+09/27/2025  01:20 PM    <DIR>          ea
+09/27/2025  02:00 PM    <DIR>          ec
+09/27/2025  02:00 PM    <DIR>          ef
+09/27/2025  01:20 PM    <DIR>          f0
+09/27/2025  02:00 PM    <DIR>          f1
+09/27/2025  01:20 PM    <DIR>          f4
+09/27/2025  01:20 PM    <DIR>          f7
+09/27/2025  01:20 PM    <DIR>          f8
+09/27/2025  01:20 PM    <DIR>          fc
+09/27/2025  01:20 PM    <DIR>          fd
+09/27/2025  01:20 PM    <DIR>          ff
+09/27/2025  01:07 PM    <DIR>          info
+09/27/2025  01:07 PM    <DIR>          pack
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\00
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               569 0e10ccbb0d00a4bdd518db4c0b6e5030db49f0
+09/27/2025  02:00 PM               119 5a24b545e0997217af6d6e8e067a29e8584e1d
+               2 File(s)            688 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\03
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            31,422 74369319d1bd6ed4bf1b51da60b985855e2d55
+09/27/2025  01:18 PM               521 c619bcc8c546381280d5d283224b0cfd700328
+09/27/2025  02:00 PM            32,679 e88cd11cb98a9910d73862fc91f673e861d8e2
+               3 File(s)         64,622 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\04
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               332 2ddba9be50afc05f4629e109a3940df2780142
+               1 File(s)            332 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\07
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               367 336d1f1d17722d7e83cec6b8e7f9a0ab9c26ae
+               1 File(s)            367 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\0a
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                86 d0986d5320ccbe3490b9fec85fa2f31c90c143
+09/27/2025  01:18 PM             1,013 faf9f2a5af263969204b07719d9436ec3806f5
+               2 File(s)          1,099 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\0b
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                58 9b873cbd47c1727b8457e3920977e5c2ef6806
+               1 File(s)             58 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\0c
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               367 651f827dd387090bf82b81197263b94fed166b
+09/27/2025  01:18 PM               508 98fb0639b7a37f22fdffb3578cac9287cbd948
+               2 File(s)            875 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\0e
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               729 26139bea20f0f26f899190b21161e44510e740
+               1 File(s)            729 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\11
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,265 0f1178839508ea2207abba3a8dd2a794ed36db
+09/27/2025  01:18 PM             1,521 2f2e8ba6b0de072e5fc224ac264b9ceede298f
+09/27/2025  01:18 PM            28,997 e5e0209f051234cc6499ac306afa787deb449e
+               3 File(s)         31,783 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\13
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            27,402 cea3161e43ac2e5983baf869134430daaf9a61
+               1 File(s)         27,402 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\14
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               118 f5dd6e59efaa1575281d56e540c6f479339dea
+               1 File(s)            118 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\15
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            10,149 23c1134579ac48a54102bb210b53384bab0763
+               1 File(s)         10,149 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\16
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               693 3ee35c6bcb6f678a9cce1a5eedc16b05e71222
+09/27/2025  02:00 PM               185 aafd6ad338bb4772ff018ba5db8df52509d983
+               2 File(s)            878 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\18
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            25,159 a55f48075cb68e163cda1c11a3f2e71ce12f29
+               1 File(s)         25,159 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\19
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               505 b0c619d2d682e229a682724c89577e697c3105
+               1 File(s)            505 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\1f
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               181 92856cc838bbfed6bb6f9c286b095f9dc511a7
+               1 File(s)            181 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\22
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               236 8e85a4b8d0b6030bdff18c48558cc1f5ad7ec1
+               1 File(s)            236 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\24
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               835 c3e0cb359ebf29a0d9138bd108614f9ae8f523
+               1 File(s)            835 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\27
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,771 52b36c7a87383674ab853aa489083c21a8d5d3
+               1 File(s)          1,771 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\2a
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            27,839 15b424507826a11f444b207e2bd664f7bec9fa
+09/27/2025  01:18 PM               194 2f462e2485fed8eed98afc7ea1377d6c5014d8
+               2 File(s)         28,033 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\2c
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               719 fe7fbc4203d373d847bef7ef0d93303b7adeac
+               1 File(s)            719 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\2d
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               123 8a6785cefb9c463f841d23fad4da28b2e4ce9d
+               1 File(s)            123 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\30
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               189 18e4933fd96a195018eaf6cbd46678c67e5f57
+09/27/2025  01:18 PM               898 8ad2bda121a27dd16bfec17769a3eb56b66693
+09/27/2025  01:18 PM               631 d6a0a60c6cd40fd9267fb8c94df23bf192633b
+               3 File(s)          1,718 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\31
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            34,507 e421a4c9c2dcb72bbf4824a4e0f0ca196da10b
+               1 File(s)         34,507 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\33
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            33,331 25455057cffb1492e284f53a22a3840c256cc2
+09/27/2025  01:18 PM             1,592 318809996f3b976d7dc2f5809231437a722bb8
+               2 File(s)         34,923 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\34
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               820 32fd02e18e48ace4dd2d0186b418e36e04c014
+               1 File(s)            820 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\35
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             2,741 5dd9f1efe01efbe1481e3e0b13098ecad8bbf2
+               1 File(s)          2,741 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\36
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            29,688 7b57388de729cc3052f3e712e3a697bd33f82c
+               1 File(s)         29,688 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\37
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            24,818 97b96cfb12b024af0652da790124f7ecfbbf0e
+               1 File(s)         24,818 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\38
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            29,787 42f70b4b087ef5c8ab744e175283e619e80ab1
+               1 File(s)         29,787 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\39
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            30,662 50a6d68e5259a49ad37e4d0d8e9494497174c6
+09/27/2025  01:18 PM               326 a0f5d278f716721966f7e4603fd5b0f46a5027
+               2 File(s)         30,988 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\3c
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               892 dd90944b40cb890e7a3ade877e8bb99798da47
+               1 File(s)            892 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\3e
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                81 2f44ce2d3c39811b4ba6a1307a9a0e2be844e9
+               1 File(s)             81 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\3f
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               743 8eff87fb40c75325cf0b27aa175d3bc1e8a27f
+               1 File(s)            743 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\40
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            25,333 2b469f861ffc30f527ca282890feea480b221f
+09/27/2025  01:18 PM               317 842fbdcb1d4a834e1ba94923c6700d0eb5b01e
+               2 File(s)         25,650 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\41
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            29,307 d78a214a36c90cd82dc050856bb5404afc18a6
+               1 File(s)         29,307 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\42
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               316 69cdac279e9d58a2c37616239514655f14611a
+               1 File(s)            316 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\44
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               284 07efe10f7b0358137089f75bcf87528482d9a4
+               1 File(s)            284 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\46
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM                87 fa227557fb987a9fef4d85b63fbfe0294fa110
+               1 File(s)             87 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\4a
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,756 6042f591a0d71e64025a9a6937b191c11b0872
+               1 File(s)          1,756 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\4b
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               129 b20669c1eb85645d25ec4e591e1d8c4d1e91ff
+09/27/2025  01:18 PM               437 bca4b87fd67e45c6a95b31135fe2fc42a0253f
+               2 File(s)            566 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\4c
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,268 707543af245eb0cabc70eda20189025b8e0592
+               1 File(s)          1,268 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\4e
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               800 54a46442df48c6ab3fbf4c8f7905a95e2ccc9e
+09/27/2025  01:18 PM             2,471 d65c18509067a70615722d53824f5a465ac120
+               2 File(s)          3,271 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\4f
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                49 9a7d34886fb92d8228c4ff89abb275e83c8349
+               1 File(s)             49 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\54
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,065 4efee665ea33e70cf21d7c3dad17cd1b95d27f
+               1 File(s)          1,065 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\55
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               353 89b9172cf9d96b1d95203f6922d1174b50778e
+               1 File(s)            353 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\58
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               407 9b166583f59799d32a83b2e9eec64c542839df
+               1 File(s)            407 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\59
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               698 e4dcc54deb8ebac1a675677eed827f628cd85d
+               1 File(s)            698 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\5b
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                53 fad2b3f8e483b6b173d8aaff19597e84626f15
+               1 File(s)             53 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\5c
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            31,664 923473c2944622a1669a897161078b989b42c7
+               1 File(s)         31,664 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\5d
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            30,119 69fb310379627f51f364cdecfd9674989b8c63
+09/27/2025  01:18 PM               234 b4139cc6043c71884999823453280729c81f2a
+09/27/2025  01:18 PM                54 f7f650b80fef281199e7d1c6bf53c6a5280802
+               3 File(s)         30,407 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\5f
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                66 26f088d16ecf32914be9e84afd05f4ece2b312
+09/27/2025  01:18 PM            26,290 657941f23e39f6681eff21aae546bf464dade6
+09/27/2025  01:18 PM               573 9d58a566782b3bd04c13e9e4aa31eca7d6e9f7
+               3 File(s)         26,929 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\61
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM                83 77b3ac5407fe6e7b6b245d6c4776a02e4c920a
+               1 File(s)             83 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\62
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            28,736 0420914d58e8f89ffa78d84fb4a02c537266ca
+09/27/2025  01:18 PM               253 af3e7fc6654d781fd08e58d5481a362da6e7ad
+               2 File(s)         28,989 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\63
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            26,960 a57a7e2eda893dbd8a1b1c8f7c756ef22a1b6c
+09/27/2025  01:18 PM            29,531 cba654e48f3d532f3b9ed0e02534f1f3da2583
+               2 File(s)         56,491 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\64
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               154 373012e98488b636680056999d0ef1320eb893
+09/27/2025  01:18 PM               528 562cf67162e110d512dbc05b2c35319dbfd029
+09/27/2025  01:18 PM               235 7ef0fc76b80ef3215507b6157e8f27eb23feb5
+               3 File(s)            917 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\66
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               216 8325970d768584933b9b97aa7316bcd0284fc8
+               1 File(s)            216 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\68
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                71 9c11777ad99aec2fd982d6c4983ccee600c227
+09/27/2025  01:18 PM               972 f3605cf204b73a0fc98b493900a9569e98c684
+               2 File(s)          1,043 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\6b
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               100 56eb4fb2f27932e49325cb105c0ef52c4c66d8
+               1 File(s)            100 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\6c
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,140 b1df2d1983a143cb853975b0f7ea5d47a0c971
+09/27/2025  01:18 PM               203 bad6d2c1add3256eba58a1dccd4010d46803bb
+               2 File(s)          1,343 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\6d
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               224 7949d049deb04e74ad684d60e9bd3d5a244e37
+09/27/2025  01:18 PM                59 bf99414b1397fbc7c44cda652e9d02e2ef303d
+09/27/2025  02:00 PM                65 d41a452de92f9d64a3f6acd5b662185c89a365
+               3 File(s)            348 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\70
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               230 33bed4e777e5684f0e67d399fe868e3a5ed5e8
+09/27/2025  01:18 PM            30,130 8038547aa9d26ba61d8cc7fdc555ad38301408
+               2 File(s)         30,360 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\72
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             2,042 7183a361a03fed82b85ac8628bbda76012643d
+               1 File(s)          2,042 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\73
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               629 9ace1efa11d917ae0948befa93aff980922ea4
+               1 File(s)            629 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\75
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               310 9204eae720f9ac37ed407e5edf6848b03a2e3c
+09/27/2025  02:00 PM                97 9f8f24f90457509f7d3d99efef1351bd0a2cc0
+               2 File(s)            407 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\77
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               161 d7de72b6ae84762f8b20c4ad43fa39406ee4ba
+               1 File(s)            161 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\79
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               706 d9ab4ae1858315aa4007983c13e2cac8194f83
+               1 File(s)            706 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\7c
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            30,452 13be61e436471b973cd3c7625016210ac2ea02
+09/27/2025  01:18 PM               596 2efcbdd7089b67a29820ffcd97365e1dc226d6
+09/27/2025  01:18 PM            31,418 44915d4bd1f1106d9d45570cb3a4f5bc576ad7
+               3 File(s)         62,466 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\80
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,037 45695ba21df211521007361b10f8f0e985955b
+               1 File(s)          1,037 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\83
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,360 52a781be38fa69b05f051e529d8a27a8887602
+               1 File(s)          1,360 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\84
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               799 72bf096f15108f77729d49128e3d14298d4405
+               1 File(s)            799 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\85
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               683 6b94db245b98afb9b458567b8f050804179f76
+09/27/2025  02:00 PM             3,722 c723826a1c8761a8b531db94aae4a643d89340
+               2 File(s)          4,405 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\87
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            31,637 4dc21ffb1632f2b893cd9003f390f21decf642
+               1 File(s)         31,637 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\88
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               712 e9fbc9f5e1a823f2d66873b7c73b04dc6ac7a8
+               1 File(s)            712 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\8a
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            33,874 f9992b27c98a2c51637f416621cd439a02a505
+               1 File(s)         33,874 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\8b
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                16 137891791fe96927ad78e64b0aad7bded08bdc
+09/27/2025  01:18 PM                49 a2bf73f3401bba542a42d52a2faf4807b7f471
+               2 File(s)             65 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\8c
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             4,803 b0588652dc6a323a5a383758425e9e076d0a18
+09/27/2025  02:00 PM           255,930 e0216ee5d2f7fb9a7089115aadec86b25e0695
+               2 File(s)        260,733 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\8f
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               435 1810e1fb21e4be88d8ca0488939d27dd72d78d
+               1 File(s)            435 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\90
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               605 8620a9fd3436b5a729287bbe55f5bfb4607735
+               1 File(s)            605 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\93
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               399 f8fc85314837c35c6883e3840aca110fd61540
+               1 File(s)            399 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\96
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               642 2096944944b33373e983beb813b98c0248976c
+09/27/2025  02:00 PM               840 9f6413664cf861547672bd461f3ecc99f767f5
+09/27/2025  01:18 PM            30,977 bca5bfd71fc427d1d383786f84687a55867e32
+               3 File(s)         32,459 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\97
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               698 869d96ed310493b29dc3dbed9811cd8dc8418a
+09/27/2025  01:18 PM               627 f2f40ea264688f14db6cb6b943296a1b0bebdb
+               2 File(s)          1,325 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\99
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               554 29936c095a84a9254706ab94c726531cd137cd
+09/27/2025  01:18 PM            34,389 a129be6f00f4d1a741b40d0a3089bdc55becbd
+               2 File(s)         34,943 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\9b
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               179 7cd4e13487db2e20f4f3844255f0b967db8448
+               1 File(s)            179 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\9c
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               813 17229feca4b84dc7bbc733ce8d34822730027e
+09/27/2025  01:18 PM               638 ab745f614b06753428021c748148a2591a3634
+               2 File(s)          1,451 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\9e
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             5,071 42a67465cb178e6498e872fa387b5e419abdde
+               1 File(s)          5,071 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a0
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               368 6330749c170b1b815476f550342d835cfc206a
+               1 File(s)            368 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a1
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               582 75500d236aca97562e2aad10838f3513f8ec76
+09/27/2025  01:18 PM               826 bba1af0a4d163223fbc5d8cd915f29ccff4332
+               2 File(s)          1,408 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a3
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,166 4e7a513bc125db62167c337c45a95e3793f1e5
+               1 File(s)          1,166 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a4
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,741 a30ed93f1e077062ea3b8e8c2e0562a1337ba4
+09/27/2025  01:18 PM             1,224 e6cdd217e89a1fd8399ce34675faad504c70d1
+               2 File(s)          2,965 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a5
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               140 ef193506d07d0459fec4f187af08283094d7c8
+               1 File(s)            140 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a6
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            17,158 737f27d11b4dd4a72474e65c2ed86e9f747d57
+               1 File(s)         17,158 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a8
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               355 bb8a37914d6f0b830725629a8c810c759716bf
+               1 File(s)            355 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\a9
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               318 3d58393804b4dcda698e6a6e475f65a6889356
+               1 File(s)            318 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\aa
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               786 2c37b252a6f4fa36c608f91e09f10740bdbfaa
+09/27/2025  01:18 PM             5,693 e55b28cbc8956493450598c10c9c708f914baf
+               2 File(s)          6,479 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ac
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,181 f38331593af1ef88196b651dd11114c4a90141
+09/27/2025  01:18 PM                88 f47a6e7e8766a1cf6578475d39024474cd905f
+               2 File(s)          1,269 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ae
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               692 b0ff0d76c834839169b54ba236fb061b81e203
+               1 File(s)            692 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\b1
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            30,170 39fbd1efdde67fe9d6563923ef2fabac2f8629
+09/27/2025  01:18 PM               343 3ce94e55d681d634312d119f9770d2f56ded86
+09/27/2025  01:18 PM               124 88849ed9993e28b08ec3bd9af86edac2c1bf24
+               3 File(s)         30,637 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\b2
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             7,015 0b5115ebbca59de2d6d761491cb9a33b560688
+               1 File(s)          7,015 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\b3
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,039 0236faaeb97276eda9777d5da8bfcc7a3e1cea
+09/27/2025  01:18 PM               723 3677c9f387b37f8bf3d741e740238de14cc273
+               2 File(s)          1,762 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\b5
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               839 d87034e8027f98c4998c4e5a7008d38548649e
+               1 File(s)            839 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\b8
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               687 3c1cc34925ace6e03446b80c02c06b2d96f7eb
+               1 File(s)            687 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ba
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            31,329 208a7fa4f78d856282b4521cdff6bfaa9a2258
+09/27/2025  01:18 PM               274 ddbac04ba8175c9f800c4b0a82721609da2ed7
+               2 File(s)         31,603 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\bb
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                56 4da7780447f1c3e9989024c02990158695a140
+09/27/2025  01:18 PM               847 813296a1f247a02741d869ce51997b6513e2fa
+               2 File(s)            903 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\bd
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,797 1333fbfa9dcdca854c53f881b23aab06c0063e
+               1 File(s)          1,797 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\bf
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM                60 90232031f4d4268e79be0bbf5370c42102763c
+               1 File(s)             60 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\c1
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,152 c678038745f80b73e528ef3a3fa4a0f9a5e857
+               1 File(s)          1,152 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\c2
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            27,966 bd3fc9bbc0c868417ad91387974b3b51a966ca
+               1 File(s)         27,966 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\c3
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               547 b92896d679df023c3cf0d8a5d2ad944b754733
+               1 File(s)            547 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\c4
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             3,267 a1a3b053ed325500634a111d0adbf50b7dfe06
+               1 File(s)          3,267 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\c6
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                63 d380c0bede3bea4400c41e7d12cd0c4a09f265
+               1 File(s)             63 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\c7
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               162 aed9e3798ede7d13450282765ea550779c9c07
+               1 File(s)            162 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\c8
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               149 374888e0c729a803fefe90841f1a93c53d7423
+09/27/2025  01:18 PM             1,479 54f83b48c8c9c4ba2c3585095074ddc733d75c
+               2 File(s)          1,628 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ca
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            27,013 141a9c3466d04b4889dcb159f7d90e22aceb70
+               1 File(s)         27,013 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\cb
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            30,865 3202da896faee693a64e613478055117ef3d89
+               1 File(s)         30,865 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\d0
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            27,962 41de74c9aa37f95f7057ac421555a8f446c2a2
+09/27/2025  01:18 PM             1,728 eaf2269f9233b12745e6573f8c815426ad3a6e
+               2 File(s)         29,690 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\d2
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               781 adf987870332563506c7aa93346f0c44d958c9
+               1 File(s)            781 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\d4
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM                71 3ce5dced1e6b1efc654598b47e954c617c1f28
+               1 File(s)             71 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\d5
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             3,224 58e197cddf5a44baceec57a935e9cc1ba8980f
+               1 File(s)          3,224 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\d6
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,517 a18b9893fae42fdb57a8dd325673920f015229
+               1 File(s)          1,517 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\d7
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               104 7347bbcd406e453a250746d863e60241a01eb1
+               1 File(s)            104 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\d9
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               142 6f8d8957526ea86a7aa7d5f41b0381584b6502
+               1 File(s)            142 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\de
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            29,643 39fbabcfabf819ba53b183f352f23f7c79bbc5
+               1 File(s)         29,643 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\e1
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               779 1c4c2c2f78b4f29a2d40f736174ec61585e1ad
+               1 File(s)            779 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\e2
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               916 64cd567c5141d7a38048d38d6d754641346587
+               1 File(s)            916 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\e4
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               268 d77e1ad3b80c018145e430b8b6207a8c78f820
+               1 File(s)            268 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\e5
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               203 a04d690c165526869feace9be346ea398187e7
+               1 File(s)            203 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\e6
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            25,636 5a174bbc2e4a3b6490be08fec94f730d8c0e24
+09/27/2025  01:18 PM            29,083 5d30eb34ec1bbfd4dc365a85745a1f2536d893
+               2 File(s)         54,719 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\e7
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               746 4387907768abad8ecefcec55224c9395599338
+               1 File(s)            746 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\e9
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                64 cc8ffb4fbda323e746ec0252791ea5287d08ba
+               1 File(s)             64 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ea
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               240 065bc8691d01de0e51b78dbd704779bacbf231
+               1 File(s)            240 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ec
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM             2,648 e73fb089b1598198bf2beae8ab5d101f52889d
+               1 File(s)          2,648 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ef
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,840 5fcb2deed8f31c794fceefcf294a8210ee3630
+09/27/2025  02:00 PM                48 8dc600c7ffffde268a7215419e590322f3393b
+               2 File(s)          1,888 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\f0
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               375 0eed082f1d52859032dcf755643f73798da72f
+               1 File(s)            375 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\f1
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM               186 9555acf1f874b9910520bb9bc34e82814a49d5
+09/27/2025  01:18 PM                83 f8514093cfaf30d6171ae6e3527683fcceac0e
+               2 File(s)            269 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\f4
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM                58 e5d19aace477eab6637f83f175e3eb874ee320
+               1 File(s)             58 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\f7
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  02:00 PM            29,437 7d5a29678a10fe83015cb79ba4ae8fc9b6a05b
+               1 File(s)         29,437 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\f8
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               173 4cb67b498444f8bbc510b221a8ecab0ef8882d
+               1 File(s)            173 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\fc
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM               113 5802e319abb011f4fdbe2bcf6ce2e667100699
+               1 File(s)            113 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\fd
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM             1,431 591c803ffd4a3401dd08a597a87a8ff56071ad
+               1 File(s)          1,431 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\ff
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+09/27/2025  01:18 PM            25,914 12d481da9b18029df6518cb9ffb389bbdd1da1
+               1 File(s)         25,914 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\info
+
+09/27/2025  01:07 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\objects\pack
+
+09/27/2025  01:07 PM    <DIR>          .
+09/27/2025  02:01 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\refs
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:00 PM    <DIR>          heads
+09/27/2025  01:20 PM    <DIR>          remotes
+09/27/2025  01:07 PM    <DIR>          tags
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\refs\heads
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  02:00 PM                41 main
+               1 File(s)             41 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\refs\remotes
+
+09/27/2025  01:20 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  02:01 PM    <DIR>          origin
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\refs\remotes\origin
+
+09/27/2025  02:01 PM    <DIR>          .
+09/27/2025  01:20 PM    <DIR>          ..
+09/27/2025  02:01 PM                30 HEAD
+09/27/2025  02:01 PM                41 main
+               2 File(s)             71 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.git\refs\tags
+
+09/27/2025  01:07 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.github
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 CODEOWNERS
+09/26/2025  08:28 PM            31,861 CODEOWNERS.docx
+09/26/2025  08:28 PM            33,108 pull_request_template.docx
+09/27/2025  01:16 PM                 2 pull_request_template.md
+09/27/2025  01:18 PM    <DIR>          workflows
+               4 File(s)         64,973 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\.github\workflows
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/26/2025  08:27 PM             4,149 ci.yml
+09/26/2025  08:27 PM               671 codeql.yml
+09/26/2025  08:27 PM             5,139 deploy.yml
+               3 File(s)          9,959 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\adr
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 README.md
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\api
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:18 PM    <DIR>          Infrastructure
+09/27/2025  01:18 PM    <DIR>          OpenApi
+09/27/2025  01:16 PM                 2 README.md
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\api\Infrastructure
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\api\OpenApi
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/26/2025  07:00 PM            16,641 mcp-proxy.yaml
+               1 File(s)         16,641 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\config
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:19 PM    <DIR>          effective
+09/27/2025  01:18 PM    <DIR>          expected
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\config\effective
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/26/2025  08:30 PM               316 expectede-prod.json
+               1 File(s)            316 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\config\expected
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 expected-prod.json
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\db
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:18 PM    <DIR>          grants
+09/27/2025  01:18 PM    <DIR>          migrations
+09/27/2025  01:18 PM    <DIR>          stored_procedures
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\db\grants
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 .gitkeep
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\db\migrations
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 .gitkeep
+09/26/2025  08:05 PM             4,109 V202509230900__init_schema.sql
+09/26/2025  08:08 PM             3,017 V202509230905__seed_appconfig_featureflag.sql
+               3 File(s)          7,128 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\db\stored_procedures
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 .gitkeep
+09/26/2025  08:11 PM               560 sp_Config_GetAll.sql
+09/26/2025  08:11 PM               603 sp_Config_GetValue.sql
+09/26/2025  08:12 PM               585 sp_Feature_IsEnabled.sql
+09/26/2025  08:12 PM               692 sp_Lookup_Get.sql
+               5 File(s)          2,442 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:18 PM    <DIR>          figma
+09/27/2025  01:18 PM    <DIR>          themebuilder
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:07 PM               344 index.html
+09/27/2025  01:07 PM             2,230 package.json
+09/27/2025  01:07 PM               338 README.md
+09/27/2025  01:19 PM    <DIR>          src
+09/27/2025  01:16 PM                 2 tokens.json
+09/27/2025  01:07 PM             2,874 vite.config.ts
+               5 File(s)          5,788 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:07 PM             5,703 App.tsx
+09/27/2025  01:07 PM               289 Attributions.md
+09/27/2025  01:19 PM    <DIR>          components
+09/27/2025  01:19 PM    <DIR>          guidelines
+09/27/2025  01:07 PM            32,788 index.css
+09/27/2025  01:07 PM               172 main.tsx
+09/27/2025  01:19 PM    <DIR>          styles
+               4 File(s)         38,952 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\components
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:19 PM    <DIR>          auth
+09/27/2025  01:07 PM            46,571 Dashboard.tsx
+09/27/2025  01:19 PM    <DIR>          figma
+09/27/2025  01:19 PM    <DIR>          pages
+09/27/2025  01:19 PM    <DIR>          shell
+09/27/2025  01:19 PM    <DIR>          states
+09/27/2025  01:19 PM    <DIR>          ui
+               1 File(s)         46,571 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\components\auth
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM             2,659 AuthProvider.tsx
+09/27/2025  01:07 PM             1,099 ForbiddenPage.tsx
+09/27/2025  01:07 PM             1,938 LoginCallback.tsx
+09/27/2025  01:07 PM             2,708 LoginPage.tsx
+09/27/2025  01:07 PM             1,307 LogoutPage.tsx
+09/27/2025  01:07 PM             1,243 RootGuard.tsx
+09/27/2025  01:07 PM             1,872 SimpleAuthProvider.tsx
+09/27/2025  01:07 PM             1,758 SimpleLoginPage.tsx
+               8 File(s)         14,584 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\components\figma
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM             1,153 ImageWithFallback.tsx
+               1 File(s)          1,153 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\components\pages
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM            19,250 AccessControl.tsx
+09/27/2025  01:07 PM            10,883 Config.tsx
+09/27/2025  01:07 PM             9,450 Dashboard.tsx
+09/27/2025  01:07 PM             9,104 Sessions.tsx
+09/27/2025  01:07 PM             1,616 SimpleDashboard.tsx
+               5 File(s)         50,303 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\components\shell
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM               978 AppFooter.tsx
+09/27/2025  01:07 PM             4,211 AppHeader.tsx
+09/27/2025  01:07 PM             1,030 AppShell.tsx
+09/27/2025  01:07 PM             1,798 AppSidebar.tsx
+               4 File(s)          8,017 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\components\states
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM             1,422 NotFound.tsx
+09/27/2025  01:07 PM             1,507 OfflineBanner.tsx
+09/27/2025  01:07 PM             1,422 ServerError.tsx
+09/27/2025  01:07 PM             1,075 SimpleNotFound.tsx
+               4 File(s)          5,426 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\components\ui
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM             2,074 accordion.tsx
+09/27/2025  01:07 PM             3,872 alert-dialog.tsx
+09/27/2025  01:07 PM             1,627 alert.tsx
+09/27/2025  01:07 PM               290 aspect-ratio.tsx
+09/27/2025  01:07 PM             1,110 avatar.tsx
+09/27/2025  01:07 PM             1,648 badge.tsx
+09/27/2025  01:07 PM             2,382 breadcrumb.tsx
+09/27/2025  01:07 PM             2,118 button.tsx
+09/27/2025  01:07 PM             2,928 calendar.tsx
+09/27/2025  01:07 PM             1,988 card.tsx
+09/27/2025  01:07 PM             5,620 carousel.tsx
+09/27/2025  01:07 PM             9,859 chart.tsx
+09/27/2025  01:07 PM             1,258 checkbox.tsx
+09/27/2025  01:07 PM               812 collapsible.tsx
+09/27/2025  01:07 PM             4,676 command.tsx
+09/27/2025  01:07 PM             8,265 context-menu.tsx
+09/27/2025  01:07 PM             3,842 dialog.tsx
+09/27/2025  01:07 PM             4,091 drawer.tsx
+09/27/2025  01:07 PM             8,327 dropdown-menu.tsx
+09/27/2025  01:07 PM             3,804 form.tsx
+09/27/2025  01:07 PM             1,543 hover-card.tsx
+09/27/2025  01:07 PM               514 icons.tsx
+09/27/2025  01:07 PM             2,296 input-otp.tsx
+09/27/2025  01:07 PM               963 input.tsx
+09/27/2025  01:07 PM               620 label.tsx
+09/27/2025  01:07 PM             8,440 menubar.tsx
+09/27/2025  01:07 PM             6,704 navigation-menu.tsx
+09/27/2025  01:07 PM             2,717 pagination.tsx
+09/27/2025  01:07 PM             1,647 popover.tsx
+09/27/2025  01:07 PM               749 progress.tsx
+09/27/2025  01:07 PM             1,485 radio-group.tsx
+09/27/2025  01:07 PM             2,050 resizable.tsx
+09/27/2025  01:07 PM             1,655 scroll-area.tsx
+09/27/2025  01:07 PM             6,289 select.tsx
+09/27/2025  01:07 PM               713 separator.tsx
+09/27/2025  01:07 PM             4,119 sheet.tsx
+09/27/2025  01:07 PM            21,683 sidebar.tsx
+09/27/2025  01:07 PM               275 skeleton.tsx
+09/27/2025  01:07 PM             2,012 slider.tsx
+09/27/2025  01:07 PM               583 sonner.tsx
+09/27/2025  01:07 PM             1,188 switch.tsx
+09/27/2025  01:07 PM             2,460 table.tsx
+09/27/2025  01:07 PM             1,951 tabs.tsx
+09/27/2025  01:07 PM               767 textarea.tsx
+09/27/2025  01:07 PM             1,932 toggle-group.tsx
+09/27/2025  01:07 PM             1,577 toggle.tsx
+09/27/2025  01:07 PM             1,903 tooltip.tsx
+09/27/2025  01:07 PM               585 use-mobile.ts
+09/27/2025  01:07 PM               169 utils.ts
+              49 File(s)        150,180 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\guidelines
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM             2,559 Guidelines.md
+               1 File(s)          2,559 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\figma\src\styles
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  01:19 PM    <DIR>          ..
+09/27/2025  01:07 PM             5,787 globals.css
+               1 File(s)          5,787 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\themebuilder
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:57 PM    <DIR>          export
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\themebuilder\export
+
+09/27/2025  01:57 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:57 PM    <DIR>          mcpx-kendobridge
+09/27/2025  01:56 PM            14,184 README.md
+               1 File(s)         14,184 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\themebuilder\export\mcpx-kendobridge
+
+09/27/2025  01:57 PM    <DIR>          .
+09/27/2025  01:57 PM    <DIR>          ..
+09/27/2025  01:57 PM    <DIR>          dist
+09/27/2025  01:56 PM               143 package.json
+               1 File(s)            143 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\themebuilder\export\mcpx-kendobridge\dist
+
+09/27/2025  01:57 PM    <DIR>          .
+09/27/2025  01:57 PM    <DIR>          ..
+09/27/2025  01:57 PM    <DIR>          css
+09/27/2025  01:57 PM    <DIR>          scss
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\themebuilder\export\mcpx-kendobridge\dist\css
+
+09/27/2025  01:57 PM    <DIR>          .
+09/27/2025  01:57 PM    <DIR>          ..
+09/27/2025  01:56 PM         1,655,001 mcpx-kendobridge.css
+               1 File(s)      1,655,001 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\design\themebuilder\export\mcpx-kendobridge\dist\scss
+
+09/27/2025  01:57 PM    <DIR>          .
+09/27/2025  01:57 PM    <DIR>          ..
+09/27/2025  01:56 PM               146 index.scss
+09/27/2025  01:56 PM               169 _kendo.scss
+09/27/2025  01:56 PM                69 _overrides.scss
+09/27/2025  01:56 PM               146 _placeholders.scss
+09/27/2025  01:56 PM            23,602 _tokens.scss
+               5 File(s)         24,132 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\docs
+
+09/27/2025  02:00 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/23/2025  10:25 AM            35,037 01_vision.docx
+09/23/2025  10:38 AM            36,123 02_glossary.docx
+09/23/2025  10:53 AM            37,449 03_actors_usecases.docx
+09/23/2025  11:12 AM            38,648 04_context.docx
+09/26/2025  06:29 PM            35,099 05_fr.docx
+09/26/2025  06:54 PM            35,090 06_nfr.docx
+09/26/2025  07:34 PM            31,890 07a_db_grants_sp_signature.docx
+09/23/2025  11:58 AM            36,432 07_data_contracts.docx
+09/26/2025  07:37 PM            34,037 08b_ui_ops_supplement.docx
+09/26/2025  06:26 PM            35,294 08_ui_ux.docx
+09/26/2025  06:38 PM            35,931 09_test_strategy.docx
+09/26/2025  06:32 PM            36,293 10_ci_cd.docx
+09/26/2025  06:43 PM            34,268 11_monitoring.docx
+09/26/2025  06:50 PM            35,072 12_evidence_pack.docx
+09/26/2025  06:46 PM            35,358 13_compliance.docx
+09/25/2025  10:09 AM            39,317 14_raci.docx
+09/25/2025  10:29 AM            39,096 15_backlog.docx
+09/25/2025  10:52 AM            35,744 16_dor_dod.docx
+09/26/2025  07:29 PM            36,344 17_threat_model.docx
+09/27/2025  01:19 PM    <DIR>          adr
+09/26/2025  09:08 AM            29,954 config_reference.docx
+09/26/2025  07:26 PM            33,763 error_catalog.docx
+09/27/2025  01:16 PM                 2 README.md
+              22 File(s)        746,241 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\docs\adr
+
+09/27/2025  01:19 PM    <DIR>          .
+09/27/2025  02:00 PM    <DIR>          ..
+09/26/2025  07:49 PM            30,846 ADR-001_transport_streamable_http.docx
+09/26/2025  07:52 PM            30,538 ADR-002_legacy_endpoints_flag.docx
+09/26/2025  07:55 PM            31,195 ADR-003_session_per_mcp_session_id.docx
+09/26/2025  07:59 PM            34,389 ADR-004_db_policy_sp_only_add_only_no_hard_coding.docx
+09/26/2025  08:02 PM            32,715 ADR-005_RTM on Prod DB Readonly Gate.docx
+09/26/2025  08:47 AM            21,912 ADR_Index.docx
+               6 File(s)        181,595 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\runbooks
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/26/2025  07:04 PM            34,598 deploy.docx
+09/26/2025  07:11 PM            35,817 incident.docx
+09/27/2025  01:16 PM                 2 README.md
+09/26/2025  07:08 PM            33,982 rollback.docx
+09/26/2025  07:24 PM            33,011 rotate_telerik_license.docx
+09/26/2025  07:14 PM            32,490 scale_out.docx
+               6 File(s)        169,900 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\tests
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:18 PM    <DIR>          api
+09/27/2025  01:18 PM    <DIR>          contract
+09/27/2025  01:18 PM    <DIR>          gherkin
+09/27/2025  01:18 PM    <DIR>          perf
+09/27/2025  01:18 PM    <DIR>          web
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\tests\api
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 .gitkeep
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\tests\contract
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 .gitkeep
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\tests\gherkin
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 .gitkeep
+09/25/2025  03:14 PM             2,793 01_session_establish.feature
+09/25/2025  03:14 PM             1,936 02_streamed_tool_call.feature
+09/25/2025  03:14 PM             1,908 03_background_notification.feature
+09/25/2025  03:14 PM             1,730 04_origin_denied.feature
+               5 File(s)          8,369 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\tests\perf
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:18 PM    <DIR>          k6
+09/26/2025  08:29 PM             1,175 k6_sse_ttfb.js
+               1 File(s)          1,175 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\tests\perf\k6
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 k6_sse_ttfb.js
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\tests\web
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 .gitkeep
+               1 File(s)              2 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\web
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  02:14 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 package.json
+09/27/2025  01:16 PM                 2 README.md
+09/27/2025  01:18 PM    <DIR>          src
+               2 File(s)              4 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\web\src
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:18 PM    <DIR>          pages
+09/27/2025  01:18 PM    <DIR>          shared
+09/27/2025  01:18 PM    <DIR>          styles
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\web\src\pages
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\web\src\shared
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+               0 File(s)              0 bytes
+
+ Directory of C:\Users\rjain\OneDrive - Technijian, Inc\Documents\GitHub\tech-mcpx-kendobridge\web\src\styles
+
+09/27/2025  01:18 PM    <DIR>          .
+09/27/2025  01:18 PM    <DIR>          ..
+09/27/2025  01:16 PM                 2 themebuilder-overrides.css
+               1 File(s)              2 bytes
+
+     Total Files Listed:
+             386 File(s)      4,804,761 bytes
+             604 Dir(s)  462,041,796,608 bytes free

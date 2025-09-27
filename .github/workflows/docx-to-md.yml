@@ -1,0 +1,41 @@
+name: DocX to Markdown mirror
+
+on:
+  push:
+    paths:
+      - 'docs/**/*.docx'
+      - '.github/workflows/docx-to-md.yml'
+  workflow_dispatch: {}
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+
+      - name: Convert .docx -> .md into docs-md/
+        shell: bash
+        run: |
+          mkdir -p docs-md
+          shopt -s globstar
+          for f in docs/**/*.docx; do
+            base="${f##docs/}"
+            out="docs-md/${base%.docx}.md"
+            mkdir -p "$(dirname "$out")"
+            pandoc "$f" -f docx -t gfm -o "$out"
+            # add a header with source reference
+            sed -i "1i> _Source: $f_\n" "$out"
+          done
+
+      - name: Commit Markdown mirror
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(docs): mirror .docx → Markdown"
+          file_pattern: docs-md/**
