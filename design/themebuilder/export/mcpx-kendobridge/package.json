@@ -1,0 +1,8 @@
+{
+  "name": "MCPX-KendoBridge",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@progress/kendo-theme-fluent": "12.0.0"
+  }
+}
