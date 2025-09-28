@@ -103,3 +103,73 @@ jobs:
       run:
         working-directory: ${{ env.WEB_DIR }}
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: ${{ env.WEB_DIR }}/package-lock.json
+
+      - name: Install
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      - name: Lint (if configured)
+        run: npm run lint --if-present
+
+      - name: Build
+        run: npm run build
+
+      - name: Unit tests (if present)
+        run: npm test --if-present
+
+      - name: Upload web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: |
+            ${{ env.WEB_DIR }}/build
+            ${{ env.WEB_DIR }}/dist
+          if-no-files-found: warn
+
+  api:
+    name: Build & test API
+    needs: theme-guard
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.API_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+  codeql:
+    name: CodeQL (JS + C#)
+    if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
+    needs: [web, api]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, csharp
+      - uses: github/codeql-action/analyze@v3
