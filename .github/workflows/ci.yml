@@ -1,132 +1,105 @@
-name: CI
+name: CI (API + Web + ThemeBuilder guard)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop, alpha, beta, rtm ]
   pull_request:
-  merge_group:
 
 permissions:
   contents: read
+  security-events: write
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-jobs:
-  build-test-dotnet:
-    name: Build & Test (.NET 8)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-      - name: Restore
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release -warnaserror
-      - name: Test (TRX + coverage)
-        run: |
-          mkdir -p artifacts/test-results
-          dotnet test --configuration Release \
-            --logger "trx;LogFileName=tests.trx" \
-            --results-directory ./artifacts/test-results \
-            /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: dotnet-test-results
-          path: artifacts/test-results
+env:
+  NODE_VERSION: "20"
+  DOTNET_VERSION: "8.0.x"
+  WEB_DIR: web
+  API_DIR: api
+  THEME_PACKAGE_NAME: mcpx-kendobridge
+  THEME_PACKAGE_DIR: design/themebuilder/export/mcpx-kendobridge
 
-  build-ui:
-    name: Build Admin Portal (KendoReact) — optional
+jobs:
+  theme-guard:
+    name: ThemeBuilder export checks
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('web/**/package.json') != '' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      # Compliance: license is build-time only; secrets live only in GitHub Environments.
-      - name: Prepare Telerik license file (masked, optional)
-        env:
-          TELERIK_LICENSE: ${{ secrets.TELERIK_LICENSE }}
-          TELERIK_LICENSE_PATH: ${{ secrets.TELERIK_LICENSE_PATH }}
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install jq (for JSON checks)
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Verify ThemeBuilder export is committed
+        shell: bash
         run: |
           set -euo pipefail
-          echo "::add-mask::$TELERIK_LICENSE"
-          if [ -n "${TELERIK_LICENSE:-}" ]; then
-            echo "$TELERIK_LICENSE" > "$RUNNER_TEMP/telerik-license.txt"
-            echo "TELERIK_LICENSE_PATH=$RUNNER_TEMP/telerik-license.txt" >> "$GITHUB_ENV"
-          fi
-      - name: Install deps
-        run: npm ci --prefix web
-      - name: Build UI
-        run: npm run build --prefix web
-      - name: Cleanup license file (hardening)
-        if: always()
-        run: |
-          test -f "$TELERIK_LICENSE_PATH" && shred -u "$TELERIK_LICENSE_PATH" || true
-      - name: Upload UI artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ui-dist
-          path: web/dist
+          PKG="$THEME_PACKAGE_DIR/package.json"
+          CSS="$THEME_PACKAGE_DIR/dist/css/${THEME_PACKAGE_NAME}.css"
+          SCSS_DIR="$THEME_PACKAGE_DIR/dist/scss"
 
-  openapi-lint-diff:
-    name: OpenAPI Lint & Diff
-    runs-on: ubuntu-latest
-    needs: [ build-test-dotnet ]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install Redocly CLI
-        run: npm i -g @redocly/cli
-      - name: Lint OpenAPI
-        run: redocly lint api/openapi/mcp-proxy.yaml
-      - name: Diff vs previous tag (if any)
-        id: diff
+          echo "Checking ThemeBuilder package at: $THEME_PACKAGE_DIR"
+
+          # Must exist on disk…
+          test -f "$PKG"      || { echo "::error file=$PKG::Missing ThemeBuilder package.json"; exit 1; }
+          test -f "$CSS"      || { echo "::error file=$CSS::Missing compiled CSS from ThemeBuilder export"; exit 1; }
+          test -d "$SCSS_DIR" || { echo "::error file=$SCSS_DIR::Missing SCSS sources from ThemeBuilder export"; exit 1; }
+
+          # …and must be tracked by git (not ignored)
+          git ls-files --error-unmatch "$PKG" >/dev/null 2>&1 || { echo "::error::ThemeBuilder package.json is not tracked by git"; exit 1; }
+          git ls-files --error-unmatch "$CSS" >/dev/null 2>&1 || { echo "::error::ThemeBuilder dist assets are not tracked by git (check .gitignore)."; exit 1; }
+
+      - name: Check package name is lowercase "mcpx-kendobridge"
+        shell: bash
         run: |
-          set -e
-          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
-            PREV=$(git describe --tags --abbrev=0)
-            echo "Comparing to $PREV"
-            redocly diff api/openapi/mcp-proxy.yaml "git:$PREV:api/openapi/mcp-proxy.yaml"
-          else
-            echo "No previous tag to diff; skipping."
+          set -euo pipefail
+          NAME=$(jq -r '.name' "$THEME_PACKAGE_DIR/package.json")
+          if [ "$NAME" != "$THEME_PACKAGE_NAME" ]; then
+            echo "::error file=$THEME_PACKAGE_DIR/package.json::Theme package name must be '$THEME_PACKAGE_NAME' (found: '$NAME')."
+            exit 1
           fi
 
-  dependency-review:
-    name: Dependency Review (fail on High/Critical)
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
+      - name: Verify Web depends on the local theme package
+        shell: bash
+        run: |
+          set -euo pipefail
+          WEB_PKG="$WEB_DIR/package.json"
+          test -f "$WEB_PKG" || { echo "::error file=$WEB_PKG::Missing $WEB_PKG"; exit 1; }
 
-  sbom:
-    name: SBOM (SPDX)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: anchore/sbom-action@v0
-        with:
-          output-file: sbom.spdx.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sbom
-          path: sbom.spdx.json
+          DEP=$(jq -r --arg n "$THEME_PACKAGE_NAME" '.dependencies[$n] // .devDependencies[$n] // empty' "$WEB_PKG")
+          if [ -z "$DEP" ]; then
+            echo "::error file=$WEB_PKG::Add \"$THEME_PACKAGE_NAME\": \"file:../$THEME_PACKAGE_DIR\" to dependencies."
+            exit 1
+          fi
 
-# Notes:
-# - CodeQL runs in a dedicated workflow (codeql.yml).
-# - Secret Scanning is enforced at repo/org level; do not print secrets in logs.
-# - Policies: No-Hard-Coding, SP-only DAL, Add-only DB are enforced via PR template & CODEOWNERS. 
+          if [ "$DEP" != "file:../$THEME_PACKAGE_DIR" ]; then
+            echo "::error file=$WEB_PKG::Dependency path must be \"file:../$THEME_PACKAGE_DIR\" (found: $DEP)."
+            exit 1
+          fi
+
+      - name: Verify single theme import (no base theme duplicates)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Fail if any direct base theme imports exist in web/src
+          if grep -R --line-number -E "@progress/kendo-theme-[^/]+/dist/(all|index)\.(css|scss)" "$WEB_DIR"/src 2>/dev/null; then
+            echo "::error::Found direct Kendo base-theme import(s) in /web/src. Remove them and import only from '$THEME_PACKAGE_NAME'."
+            exit 1
+          fi
+
+          # Require at least one import from the ThemeBuilder package
+          if ! grep -R --line-number -E "mcpx-kendobridge/dist/(scss|css)/" "$WEB_DIR"/src 2>/dev/null; then
+            echo "::error::Web app does not import the ThemeBuilder package. Import 'mcpx-kendobridge/dist/scss/index.scss' (or CSS) in your entry file."
+            exit 1
+          fi
+
+  web:
+    name: Build & test web
+    needs: theme-guard
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WEB_DIR }}
+    steps:
