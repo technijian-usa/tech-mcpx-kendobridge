@@ -1,4 +1,11 @@
-
-"dependencies": {
-  "mcpx-kendobridge": "file:../design/themebuilder/export/mcpx-kendobridge"
+{
+  "name": "admin-web",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": {
+    "mcpx-kendobridge": "file:../design/themebuilder/export/mcpx-kendobridge"
+  },
+  "devDependencies": {
+    "sass": "^1.79.0"
+  }
 }
