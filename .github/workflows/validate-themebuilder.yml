@@ -38,7 +38,7 @@ jobs:
             exit 0
           fi
 
-          echo "Scanning $root for packages…"
+          echo "Scanning $root for packages..."
           found_any=false
           failed_any=false
 
@@ -47,7 +47,7 @@ jobs:
             [[ -d "$pkg" ]] || continue
             found_any=true
 
-            echo "— Checking package: $pkg"
+            echo "Checking package: $pkg"
             pkg_json="$pkg/package.json"
             dist_dir="$pkg/dist"
 
@@ -70,26 +70,26 @@ jobs:
               # 3) dist/ files must be tracked in git
               if ! git ls-files -- "$dist_dir" | grep -q .; then
                 cat <<'EOF'
-::error::No files under dist/ are tracked by git.
-Tips:
-- Ensure your .gitignore has this exception AFTER any 'dist/' rule:
-    !design/themebuilder/export/**/dist/**
-- Re-add & commit:
-    git add -f '"$dist_dir"'
-    git commit -m "Vendor ThemeBuilder dist"
-EOF
+          ::error::No files under dist/ are tracked by git.
+          Tips:
+          - Ensure your .gitignore has this exception AFTER any 'dist/' rule:
+              !design/themebuilder/export/**/dist/**
+          - Re-add & commit:
+              git add -f '"$dist_dir"'
+              git commit -m "Vendor ThemeBuilder dist"
+          EOF
                 failed_any=true
               fi
 
               # 4) Guard against >100MB files (GitHub hard limit)
               if find "$dist_dir" -type f -size +95M -print -quit | grep -q .; then
                 cat <<'EOF'
-::error::One or more files in dist/ exceed ~95MB.
-Use Git LFS or reduce bundle size:
-  git lfs install
-  git lfs track "design/themebuilder/export/**/dist/**"
-  git add .gitattributes && git commit -m "Track ThemeBuilder dist with LFS"
-EOF
+          ::error::One or more files in dist/ exceed ~95MB.
+          Use Git LFS or reduce bundle size:
+            git lfs install
+            git lfs track "design/themebuilder/export/**/dist/**"
+            git add .gitattributes && git commit -m "Track ThemeBuilder dist with LFS"
+          EOF
                 failed_any=true
               fi
             fi
@@ -100,15 +100,4 @@ EOF
           fi
 
           # 5) (Advisory) Suggest .gitignore exception if needed
-          if grep -Eq '^[[:space:]]*dist/' .gitignore 2>/dev/null; then
-            if ! grep -Fq '!design/themebuilder/export/**/dist/**' .gitignore; then
-              echo "::warning file=.gitignore::You ignore 'dist/' but don't have the exception '!design/themebuilder/export/**/dist/**'. Consider adding it."
-            fi
-          fi
-
-          if $failed_any; then
-            echo "ThemeBuilder vendor validation failed."
-            exit 1
-          fi
-
-          echo "ThemeBuilder vendor validation passed ✅"
+          if grep -Eq '^[[:space:]]*dist/'*
