@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-09-28T00:54:53Z_
+_Auto-generated on 2025-09-28T01:02:05Z_
 
 ```
 ./
@@ -243,8 +243,10 @@ _Auto-generated on 2025-09-28T00:54:53Z_
     ├── README.md
     ├── package.json
     └── src/
+        ├── index.tsx
+        ├── main.tsx
         └── styles/
             └── themebuilder-overrides.css
 
-46 directories, 196 files
+46 directories, 198 files
 ```
