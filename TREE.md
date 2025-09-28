@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-09-27T23:24:40Z_
+_Auto-generated on 2025-09-28T00:52:09Z_
 
 ```
 ./
@@ -175,34 +175,45 @@ _Auto-generated on 2025-09-27T23:24:40Z_
 │   ├── config_reference.docx
 │   └── error_catalog.docx
 ├── docs-md/
-│   ├── 01_vision.md
-│   ├── 02_glossary.md
-│   ├── 03_actors_usecases.md
-│   ├── 04_context.md
-│   ├── 05_fr.md
-│   ├── 06_nfr.md
-│   ├── 07_data_contracts.md
-│   ├── 07a_db_grants_sp_signature.md
-│   ├── 08_ui_ux.md
-│   ├── 08b_ui_ops_supplement.md
-│   ├── 09_test_strategy.md
-│   ├── 10_ci_cd.md
-│   ├── 11_monitoring.md
-│   ├── 12_evidence_pack.md
-│   ├── 13_compliance.md
-│   ├── 14_raci.md
-│   ├── 15_backlog.md
-│   ├── 16_dor_dod.md
-│   ├── 17_threat_model.md
-│   ├── adr/
-│   │   ├── ADR-001_transport_streamable_http.md
-│   │   ├── ADR-002_legacy_endpoints_flag.md
-│   │   ├── ADR-003_session_per_mcp_session_id.md
-│   │   ├── ADR-004_db_policy_sp_only_add_only_no_hard_coding.md
-│   │   ├── ADR-005_RTM on Prod DB Readonly Gate.md
-│   │   └── ADR_Index.md
-│   ├── config_reference.md
-│   └── error_catalog.md
+│   ├── .github/
+│   │   ├── CODEOWNERS.md
+│   │   └── pull_request_template.md
+│   ├── docs/
+│   │   ├── 01_vision.md
+│   │   ├── 02_glossary.md
+│   │   ├── 03_actors_usecases.md
+│   │   ├── 04_context.md
+│   │   ├── 05_fr.md
+│   │   ├── 06_nfr.md
+│   │   ├── 07_data_contracts.md
+│   │   ├── 07a_db_grants_sp_signature.md
+│   │   ├── 08_ui_ux.md
+│   │   ├── 08a_UI Component Mapping.md
+│   │   ├── 08b_ui_ops_supplement.md
+│   │   ├── 09_test_strategy.md
+│   │   ├── 10_ci_cd.md
+│   │   ├── 11_monitoring.md
+│   │   ├── 12_evidence_pack.md
+│   │   ├── 13_compliance.md
+│   │   ├── 14_raci.md
+│   │   ├── 15_backlog.md
+│   │   ├── 16_dor_dod.md
+│   │   ├── 17_threat_model.md
+│   │   ├── adr/
+│   │   │   ├── ADR-001_transport_streamable_http.md
+│   │   │   ├── ADR-002_legacy_endpoints_flag.md
+│   │   │   ├── ADR-003_session_per_mcp_session_id.md
+│   │   │   ├── ADR-004_db_policy_sp_only_add_only_no_hard_coding.md
+│   │   │   ├── ADR-005_RTM on Prod DB Readonly Gate.md
+│   │   │   └── ADR_Index.md
+│   │   ├── config_reference.md
+│   │   └── error_catalog.md
+│   └── runbooks/
+│       ├── deploy.md
+│       ├── incident.md
+│       ├── rollback.md
+│       ├── rotate_telerik_license.md
+│       └── scale_out.md
 ├── filelist.txt
 ├── runbooks/
 │   ├── README.md
@@ -235,5 +246,5 @@ _Auto-generated on 2025-09-27T23:24:40Z_
         └── styles/
             └── themebuilder-overrides.css
 
-43 directories, 188 files
+46 directories, 196 files
 ```
