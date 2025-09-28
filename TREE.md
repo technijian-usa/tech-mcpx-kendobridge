@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-09-28T01:13:24Z_
+_Auto-generated on 2025-09-28T01:28:58Z_
 
 ```
 ./
@@ -14,7 +14,8 @@ _Auto-generated on 2025-09-28T01:13:24Z_
 │       ├── codeql.yml
 │       ├── deploy.yml
 │       ├── docx-to-md.yml
-│       └── tree-index.yml
+│       ├── tree-index.yml
+│       └── validate-themebuilder.yml
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md
@@ -248,5 +249,5 @@ _Auto-generated on 2025-09-28T01:13:24Z_
         └── styles/
             └── themebuilder-overrides.css
 
-46 directories, 198 files
+46 directories, 199 files
 ```
