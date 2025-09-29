@@ -1,76 +1,39 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
+name: Validate ThemeBuilder vendor
 
-root="design/themebuilder/export"
-if [[ ! -d "$root" ]]; then
-  echo "::notice title=ThemeBuilder::No $root/ directory; nothing to validate."
-  exit 0
-fi
+on:
+  push:
+    paths:
+      - 'design/themebuilder/**'
+      - '.github/workflows/validate-themebuilder.yml'
+      - 'scripts/validate-themebuilder.sh'
+  pull_request:
+    paths:
+      - 'design/themebuilder/**'
+      - '.github/workflows/validate-themebuilder.yml'
+      - 'scripts/validate-themebuilder.sh'
+  workflow_dispatch:
 
-echo "Scanning $root for packages..."
-found_any=false
-failed_any=false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-shopt -s nullglob
-for pkg in "$root"/*; do
-  [[ -d "$pkg" ]] || continue
-  found_any=true
+      # Convert CRLF -> LF in CI in case the script was committed with Windows endings
+      - name: Ensure LF line endings for script
+        run: |
+          if grep -q $'\r' scripts/validate-themebuilder.sh; then
+            echo "::warning::Converting CRLF to LF in scripts/validate-themebuilder.sh"
+            sed -i 's/\r$//' scripts/validate-themebuilder.sh
+          fi
 
-  echo "Checking package: $pkg"
-  pkg_json="$pkg/package.json"
-  dist_dir="$pkg/dist"
+      - name: Make script executable
+        run: chmod +x scripts/validate-themebuilder.sh
 
-  if [[ ! -f "$pkg_json" ]]; then
-    echo "::error file=$pkg::Missing package.json"
-    failed_any=true
-  fi
+      - name: Bash syntax check
+        run: bash -n scripts/validate-themebuilder.sh
 
-  if [[ ! -d "$dist_dir" ]]; then
-    echo "::error file=$pkg::Missing dist/ directory"
-    failed_any=true
-  else
-    if ! find "$dist_dir" -type f -print -quit | grep -q .; then
-      echo "::error file=$dist_dir::dist/ is empty"
-      failed_any=true
-    fi
-
-    if ! git ls-files -- "$dist_dir" | grep -q .; then
-      echo "::error::No files under dist/ are tracked by git."
-      echo "Tips:"
-      echo "- Ensure your .gitignore has this exception AFTER any 'dist/' rule:"
-      echo "    !design/themebuilder/export/**/dist/**"
-      echo "- Re-add & commit:"
-      echo "    git add -f \"$dist_dir\""
-      echo "    git commit -m \"Vendor ThemeBuilder dist\""
-      failed_any=true
-    fi
-
-    if find "$dist_dir" -type f -size +95M -print -quit | grep -q .; then
-      echo "::error::One or more files in dist/ exceed ~95MB."
-      echo "Use Git LFS or reduce bundle size:"
-      echo "  git lfs install"
-      echo "  git lfs track \"design/themebuilder/export/**/dist/**\""
-      echo "  git add .gitattributes && git commit -m \"Track ThemeBuilder dist with LFS\""
-      failed_any=true
-    fi
-  fi
-done
-
-if ! $found_any; then
-  echo "::warning title=ThemeBuilder::No packages found under $root/. If this is expected, ignore this check."
-fi
-
-if [[ -f .gitignore ]]; then
-  if grep -Eq '^[[:space:]]*dist/' .gitignore; then
-    if ! grep -Fq '!design/themebuilder/export/**/dist/**' .gitignore; then
-      echo "::warning file=.gitignore::You ignore 'dist/' but don't have the exception '!design/themebuilder/export/**/dist/**'. Consider adding it."
-    fi
-  fi
-fi
-
-if $failed_any; then
-  echo "ThemeBuilder vendor validation failed."
-  exit 1
-fi
-
-echo "ThemeBuilder vendor validation passed."
+      - name: Validate vendored ThemeBuilder packages
+        run: ./scripts/validate-themebuilder.sh
