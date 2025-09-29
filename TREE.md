@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-09-29T04:46:03Z_
+_Auto-generated on 2025-09-29T04:54:27Z_
 
 ```
 ./
@@ -223,6 +223,8 @@ _Auto-generated on 2025-09-29T04:46:03Z_
 │   ├── rollback.docx
 │   ├── rotate_telerik_license.docx
 │   └── scale_out.docx
+├── scripts/
+│   └── validate-themebuilder.sh
 ├── tests/
 │   ├── api/
 │   │   └── .gitkeep
@@ -249,5 +251,5 @@ _Auto-generated on 2025-09-29T04:46:03Z_
         └── styles/
             └── themebuilder-overrides.css
 
-46 directories, 199 files
+47 directories, 200 files
 ```
