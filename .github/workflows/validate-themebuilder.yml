@@ -1,84 +1,76 @@
-name: Validate ThemeBuilder vendor
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-on:
-  push:
-    paths:
-      - 'design/themebuilder/**'
-      - '.github/workflows/validate-themebuilder.yml'
-  pull_request:
-    paths:
-      - 'design/themebuilder/**'
-      - '.github/workflows/validate-themebuilder.yml'
-  workflow_dispatch: {}
+root="design/themebuilder/export"
+if [[ ! -d "$root" ]]; then
+  echo "::notice title=ThemeBuilder::No $root/ directory; nothing to validate."
+  exit 0
+fi
 
-permissions:
-  contents: read
+echo "Scanning $root for packages..."
+found_any=false
+failed_any=false
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+shopt -s nullglob
+for pkg in "$root"/*; do
+  [[ -d "$pkg" ]] || continue
+  found_any=true
 
-jobs:
-  validate-themebuilder:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  echo "Checking package: $pkg"
+  pkg_json="$pkg/package.json"
+  dist_dir="$pkg/dist"
 
-      - name: Verify vendored ThemeBuilder packages
-        shell: bash
-        run: |
-          set -euo pipefail
+  if [[ ! -f "$pkg_json" ]]; then
+    echo "::error file=$pkg::Missing package.json"
+    failed_any=true
+  fi
 
-          root="design/themebuilder/export"
-          if [[ ! -d "$root" ]]; then
-            echo "::notice title=ThemeBuilder::No $root/ directory; nothing to validate."
-            exit 0
-          fi
+  if [[ ! -d "$dist_dir" ]]; then
+    echo "::error file=$pkg::Missing dist/ directory"
+    failed_any=true
+  else
+    if ! find "$dist_dir" -type f -print -quit | grep -q .; then
+      echo "::error file=$dist_dir::dist/ is empty"
+      failed_any=true
+    fi
 
-          echo "Scanning $root for packages..."
-          found_any=false
-          failed_any=false
+    if ! git ls-files -- "$dist_dir" | grep -q .; then
+      echo "::error::No files under dist/ are tracked by git."
+      echo "Tips:"
+      echo "- Ensure your .gitignore has this exception AFTER any 'dist/' rule:"
+      echo "    !design/themebuilder/export/**/dist/**"
+      echo "- Re-add & commit:"
+      echo "    git add -f \"$dist_dir\""
+      echo "    git commit -m \"Vendor ThemeBuilder dist\""
+      failed_any=true
+    fi
 
-          shopt -s nullglob
-          for pkg in "$root"/*; do
-            [[ -d "$pkg" ]] || continue
-            found_any=true
+    if find "$dist_dir" -type f -size +95M -print -quit | grep -q .; then
+      echo "::error::One or more files in dist/ exceed ~95MB."
+      echo "Use Git LFS or reduce bundle size:"
+      echo "  git lfs install"
+      echo "  git lfs track \"design/themebuilder/export/**/dist/**\""
+      echo "  git add .gitattributes && git commit -m \"Track ThemeBuilder dist with LFS\""
+      failed_any=true
+    fi
+  fi
+done
 
-            echo "Checking package: $pkg"
-            pkg_json="$pkg/package.json"
-            dist_dir="$pkg/dist"
+if ! $found_any; then
+  echo "::warning title=ThemeBuilder::No packages found under $root/. If this is expected, ignore this check."
+fi
 
-            # 1) Must have package.json
-            if [[ ! -f "$pkg_json" ]]; then
-              echo "::error file=$pkg::Missing package.json"
-              failed_any=true
-            fi
+if [[ -f .gitignore ]]; then
+  if grep -Eq '^[[:space:]]*dist/' .gitignore; then
+    if ! grep -Fq '!design/themebuilder/export/**/dist/**' .gitignore; then
+      echo "::warning file=.gitignore::You ignore 'dist/' but don't have the exception '!design/themebuilder/export/**/dist/**'. Consider adding it."
+    fi
+  fi
+fi
 
-            # 2) Must have non-empty dist/
-            if [[ ! -d "$dist_dir" ]]; then
-              echo "::error file=$pkg::Missing dist/ directory"
-              failed_any=true
-            else
-              if ! find "$dist_dir" -type f -print -quit | grep -q .; then
-                echo "::error file=$dist_dir::dist/ is empty"
-                failed_any=true
-              fi
+if $failed_any; then
+  echo "ThemeBuilder vendor validation failed."
+  exit 1
+fi
 
-              # 3) dist/ files must be tracked in git
-              if ! git ls-files -- "$dist_dir" | grep -q .; then
-                printf '%s\n' \
-                  "::error::No files under dist/ are tracked by git." \
-                  "Tips:" \
-                  "- Ensure your .gitignore has this exception AFTER any 'dist/' rule:" \
-                  "    !design/themebuilder/export/**/dist/**" \
-                  "- Re-add & commit:" \
-                  "    git add -f \"$dist_dir\"" \
-                  "    git commit -m \"Vendor ThemeBuilder dist\""
-                failed_any=true
-              fi
-
-              # 4) Guard against >100MB files (GitHub hard limit)
-              if find "$dist_dir" -type f -size +95M_
+echo "ThemeBuilder vendor validation passed."
