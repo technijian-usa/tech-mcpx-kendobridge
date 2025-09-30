@@ -42,14 +42,13 @@ jobs:
           CSS="$THEME_PACKAGE_DIR/dist/css/${THEME_PACKAGE_NAME}.css"
           SCSS_DIR="$THEME_PACKAGE_DIR/dist/scss"
 
-          echo "Checking ThemeBuilder package at: $THEME_PACKAGE_DIR"
           test -f "$PKG"      || { echo "::error file=$PKG::Missing ThemeBuilder package.json"; exit 1; }
           test -f "$CSS"      || { echo "::error file=$CSS::Missing compiled CSS from ThemeBuilder export"; exit 1; }
           test -d "$SCSS_DIR" || { echo "::error file=$SCSS_DIR::Missing SCSS sources from ThemeBuilder export"; exit 1; }
 
           # Must be tracked by git (not ignored)
-          git ls-files --error-unmatch "$PKG" >/dev/null 2>&1 || { echo "::error::ThemeBuilder package.json is not tracked by git"; exit 1; }
-          git ls-files --error-unmatch "$CSS" >/dev/null 2>&1 || { echo "::error::ThemeBuilder dist assets are not tracked by git (check .gitignore)."; exit 1; }
+          git ls-files --error-unmatch "$PKG"  >/dev/null 2>&1 || { echo "::error::ThemeBuilder package.json is not tracked by git"; exit 1; }
+          git ls-files --error-unmatch "$CSS"  >/dev/null 2>&1 || { echo "::error::ThemeBuilder dist assets are not tracked by git (check .gitignore)."; exit 1; }
 
       - name: Check package name is lowercase "${{ env.THEME_PACKAGE_NAME }}"
         shell: bash
@@ -93,10 +92,27 @@ jobs:
             exit 1
           fi
 
-          # Require at least one import from the ThemeBuilder package
+          # Require at least one import from the ThemeBuilder package anywhere under src
           if ! grep -R -nE "${THEME_PACKAGE_NAME}/dist/(scss|css)/" "$WEB_DIR"/src 2>/dev/null; then
             echo "::error::Web app does not import the ThemeBuilder package. Import '${THEME_PACKAGE_NAME}/dist/scss/index.scss' (or CSS) in your entry file."
             exit 1
+          fi
+
+      - name: Verify expected web/src structure
+        shell: bash
+        run: |
+          set -euo pipefail
+          declare -a REQUIRED=("app.tsx" "index.tsx" "main.tsx" "types.ts" "global.d.ts" "components" "lib" "routes")
+          for item in "${REQUIRED[@]}"; do
+            if [ -e "$WEB_DIR/src/$item" ]; then
+              echo "OK: $WEB_DIR/src/$item"
+            else
+              echo "::error ::Missing $WEB_DIR/src/$item"; exit 1
+            fi
+          done
+          # Optional folder
+          if [ ! -d "$WEB_DIR/src/styles" ]; then
+            echo "::notice ::Optional: $WEB_DIR/src/styles not found (that’s fine if you don’t use local tweaks)."
           fi
 
       - name: Case sanity (Linux runners are case-sensitive)
