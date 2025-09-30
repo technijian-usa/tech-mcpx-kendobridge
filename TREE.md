@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-09-30T19:01:10Z_
+_Auto-generated on 2025-09-30T19:18:02Z_
 
 ```
 ./
@@ -29,6 +29,8 @@ _Auto-generated on 2025-09-30T19:01:10Z_
 │   ├── README.md
 │   ├── Technijian.MCPX.AdminApi.csproj
 │   ├── dockerfile
+│   ├── openapi/
+│   │   └── admin.yaml
 │   └── program.cs
 ├── api.tests/
 │   ├── AllowedOriginsProviderTests.cs
@@ -49,6 +51,7 @@ _Auto-generated on 2025-09-30T19:01:10Z_
 │   │   ├── V202509230900__init_schema.sql
 │   │   ├── V202509230905__seed_appconfig_featureflag.sql
 │   │   ├── V20250928_2230__baseline.sql
+│   │   ├── V20250930_0000__baseline.sql
 │   │   ├── sp_Config_GetAll.sql
 │   │   ├── sp_Config_GetValue.sql
 │   │   ├── sp_Feature_IsEnabled.sql
@@ -61,7 +64,8 @@ _Auto-generated on 2025-09-30T19:01:10Z_
 │       ├── sp_Config_GetAll.sql
 │       ├── sp_Config_GetValue.sql
 │       ├── sp_Feature_IsEnabled.sql
-│       └── sp_Lookup_Get.sql
+│       ├── sp_Lookup_Get.sql
+│       └── sp_Security_GetAllowedOrigins.sql
 ├── deploy/
 │   └── docker-compose.yml
 ├── design/
@@ -293,5 +297,5 @@ _Auto-generated on 2025-09-30T19:01:10Z_
     ├── tsconfig.json
     └── vite.config.ts
 
-54 directories, 235 files
+55 directories, 238 files
 ```
