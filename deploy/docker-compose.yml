@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  api:
+    image: ghcr.io/${OWNER}/mcpx-admin-api:${IMAGE_TAG}
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - SQL_CONN_STRING=${SQL_CONN_STRING}
+    networks: [ mcpx ]
+    ports:
+      - "5000:5000"   # optional expose on host; remove on server if behind reverse proxy
+
+  web:
+    image: ghcr.io/${OWNER}/mcpx-admin-web:${IMAGE_TAG}
+    restart: unless-stopped
+    depends_on: [ api ]
+    networks: [ mcpx ]
+    ports:
+      - "8080:80"     # web UI on http://server:8080
+
+networks:
+  mcpx: {}
