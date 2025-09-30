@@ -1,8 +1,6 @@
 .git
 .github
-Dockerfile*
 bin
 obj
-node_modules
-dist
-.env
+Dockerfile
+*.user

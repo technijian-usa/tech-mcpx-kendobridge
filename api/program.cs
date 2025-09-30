@@ -1,3 +1,10 @@
+// ----------------------------------------------------------------------------
+// Technijian MCPX Admin API (ASP.NET Core 8 Minimal API)
+// - No secrets in code. SQL connection via env: SQL_CONN_STRING
+// - SP-only DAL. Config/CORS pulled from DB (AppConfig / Security_AllowedOrigin)
+// - JWT (Azure AD). Policy "RequireScope" checks `scp` claim if configured.
+// - SSE endpoint supports optional auth via ?access_token= for EventSource.
+// ----------------------------------------------------------------------------
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Caching.Memory;
@@ -8,25 +15,24 @@ using System.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMemoryCache();
 
-/* Connection string from env/secret — never hard-code. */
-var sqlConnString = new SqlConnectionStringBuilder(
+// SQL connection string from env/secret (never commit secrets).
+var connString = new SqlConnectionStringBuilder(
     Environment.GetEnvironmentVariable("SQL_CONN_STRING")
     ?? builder.Configuration.GetConnectionString("Default")
     ?? throw new InvalidOperationException("SQL_CONN_STRING / ConnectionStrings__Default not set.")
 ).ConnectionString;
 
-/* DI */
-builder.Services.AddSingleton(sqlConnString);
+// Register services
+builder.Services.AddSingleton(connString);
 builder.Services.AddSingleton<ISqlDal, SqlDal>();
 builder.Services.AddSingleton<PublicConfigProvider>();
 builder.Services.AddSingleton<AllowedOriginsProvider>();
 
-/* Boot auth config from DB (non-secret) */
-var boot = await AuthBootConfig.LoadAsync(sqlConnString);
+// Boot auth config from DB (non-secret)
+var boot = await AuthBootConfig.LoadAsync(connString);
 
-/* JWT (Azure AD) */
-builder.Services
-  .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+// JWT (Azure AD)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
   .AddJwtBearer(options =>
   {
       options.Authority = boot.Authority;
@@ -35,25 +41,25 @@ builder.Services
           ValidateIssuer = true,
           ValidAudience = boot.Audience,
           ValidateAudience = true,
-          ValidateLifetime = true,
+          ValidateLifetime = true
       };
+      // Allow tokens via query on the SSE route (EventSource cannot set headers)
       options.Events = new JwtBearerEvents
       {
           OnMessageReceived = ctx =>
           {
-              var accessToken = ctx.Request.Query["access_token"].ToString();
-              var path = ctx.HttpContext.Request.Path;
-              if (!string.IsNullOrWhiteSpace(accessToken) &&
-                  path.StartsWithSegments("/sessions/stream", StringComparison.OrdinalIgnoreCase))
+              var token = ctx.Request.Query["access_token"].ToString();
+              if (!string.IsNullOrEmpty(token) &&
+                  ctx.HttpContext.Request.Path.StartsWithSegments("/sessions/stream", StringComparison.OrdinalIgnoreCase))
               {
-                  ctx.Token = accessToken;
+                  ctx.Token = token;
               }
               return Task.CompletedTask;
           }
       };
   });
 
-/* RequireScope policy — checks `scp` claim for a configured scope (if provided). */
+// Scope-based policy (optional; no-op when Auth:RequiredScope is empty)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireScope", policy =>
@@ -61,7 +67,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAssertion(ctx =>
         {
             var required = boot.RequiredScope;
-            if (string.IsNullOrWhiteSpace(required)) return true; // nothing required
+            if (string.IsNullOrWhiteSpace(required)) return true;
             var scopes = (ctx.User.FindFirst("scp")?.Value ?? "")
                         .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             return scopes.Contains(required, StringComparer.Ordinal);
@@ -69,12 +75,12 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-/* Minimal request logging */
+// Minimal structured logging
 builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
 
 var app = builder.Build();
 
-/* Security headers (API) */
+// Security headers (basic)
 app.Use(async (ctx, next) =>
 {
     ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
@@ -82,7 +88,7 @@ app.Use(async (ctx, next) =>
     await next();
 });
 
-/* Dynamic CORS (DB allow-list) */
+// Dynamic CORS from DB allow-list (applies to all responses)
 app.Use(async (ctx, next) =>
 {
     var origin = ctx.Request.Headers.Origin.ToString();
@@ -111,20 +117,23 @@ app.Use(async (ctx, next) =>
 app.UseAuthentication();
 app.UseAuthorization();
 
-/* Public */
+// ---- Public endpoints -------------------------------------------------------
 app.MapGet("/health", () => Results.Ok(new { status = "ok", service = "Technijian.MCPX.AdminApi" }));
+
 app.MapGet("/readiness", async (ISqlDal dal, CancellationToken ct) =>
 {
+    // Touch DB to confirm connectivity/readiness
     await dal.ExecuteAsync("dbo.sp_Config_GetAll", CommandType.StoredProcedure, ct: ct);
     return Results.Ok(new { ready = true });
 });
+
 app.MapGet("/config/public", async (PublicConfigProvider cfg, CancellationToken ct) =>
 {
     var result = await cfg.GetAsync(ct);
     return result is null ? Results.NoContent() : Results.Ok(result);
 });
 
-/* Authenticated (scope-gated) */
+// ---- Authenticated endpoints -----------------------------------------------
 app.MapGet("/config", async (ISqlDal dal, CancellationToken ct) =>
 {
     var table = await dal.QueryAsync("dbo.sp_Config_GetAll", CommandType.StoredProcedure, ct: ct);
@@ -137,7 +146,7 @@ app.MapGet("/access/allowlist", async (AllowedOriginsProvider p, CancellationTok
     return Results.Ok(origins);
 }).RequireAuthorization("RequireScope");
 
-/* SSE — optional auth (DB-driven) */
+// ---- Server-Sent Events (keepalive) ----------------------------------------
 var sseRoute = app.MapGet("/sessions/stream", async (HttpContext ctx, PublicConfigProvider cfg, CancellationToken ct) =>
 {
     ctx.Response.Headers.Append("Cache-Control", "no-cache");
@@ -157,8 +166,9 @@ if (boot.SseRequireAuth) sseRoute.RequireAuthorization("RequireScope");
 
 app.Run();
 
-/* ================= helpers & providers ================= */
+// ====================== Helpers & Providers ================================
 
+/// <summary>Authentication boot config pulled from DB at startup.</summary>
 public sealed record AuthBootConfig(string Authority, string Audience, bool SseRequireAuth, string? RequiredScope)
 {
     public static async Task<AuthBootConfig> LoadAsync(string connString)
@@ -169,8 +179,8 @@ public sealed record AuthBootConfig(string Authority, string Audience, bool SseR
             await conn.OpenAsync();
             await using var cmd = new SqlCommand("dbo.sp_Config_GetValue", conn) { CommandType = CommandType.StoredProcedure };
             cmd.Parameters.AddWithValue("@Key", key);
-            var val = await cmd.ExecuteScalarAsync();
-            return val?.ToString();
+            var v = await cmd.ExecuteScalarAsync();
+            return v?.ToString();
         }
 
         var authority = await GetAsync(connString, "Auth:Authority");
@@ -188,11 +198,12 @@ public sealed record AuthBootConfig(string Authority, string Audience, bool SseR
             throw new InvalidOperationException("Auth:Audience is required");
 
         var require = bool.TryParse(sseAuth, out var b) && b;
-        return new AuthBootConfig(authority, audience, require, string.IsNullOrWhiteSpace(scope) ? null : scope);
+        var reqScope = string.IsNullOrWhiteSpace(scope) ? null : scope;
+        return new AuthBootConfig(authority, audience, require, reqScope);
     }
 }
 
-/* —— DAL contracts for testability —— */
+/// <summary>DAL contract so providers can be unit-tested with fakes.</summary>
 public interface ISqlDal
 {
     Task<int> ExecuteAsync(string name, CommandType type, IEnumerable<SqlParameter>? @params = null, CancellationToken ct = default);
@@ -200,6 +211,7 @@ public interface ISqlDal
     Task<string?> QueryStringAsync(string spName, params SqlParameter[] ps);
 }
 
+/// <summary>Thin DAL restricted to stored procedures.</summary>
 public sealed class SqlDal : ISqlDal
 {
     private readonly string _cs;
@@ -244,6 +256,7 @@ public sealed class SqlDal : ISqlDal
     }
 }
 
+/// <summary>Exposes only public (non-secret) boot config to the SPA.</summary>
 public sealed class PublicConfigProvider
 {
     private readonly ISqlDal _dal;
@@ -258,14 +271,15 @@ public sealed class PublicConfigProvider
     public async Task<object?> GetAsync(CancellationToken ct)
     {
         var dict = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
-        foreach (var key in PublicKeys)
+        foreach (var k in PublicKeys)
         {
-            var val = await _dal.QueryStringAsync("dbo.sp_Config_GetValue", new SqlParameter("@Key", key));
-            if (!string.IsNullOrWhiteSpace(val)) dict[key] = val;
+            var v = await _dal.QueryStringAsync("dbo.sp_Config_GetValue", new SqlParameter("@Key", k));
+            if (!string.IsNullOrWhiteSpace(v)) dict[k] = v;
         }
 
         var origins = await _dal.QueryAsync("dbo.sp_Security_GetAllowedOrigins", CommandType.StoredProcedure, ct: ct);
-        var allowedOrigins = origins.Select(r => r["Origin"]?.ToString()).Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+        var allowedOrigins = origins.Select(r => r["Origin"]?.ToString())
+                                    .Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
 
         if (dict.Count == 0 && allowedOrigins.Length == 0) return null;
 
@@ -281,17 +295,18 @@ public sealed class PublicConfigProvider
                 heartbeatSeconds = int.TryParse(dict.GetValueOrDefault("Sse:HeartbeatSeconds"), out var s) ? s : 15,
                 requireAuth = bool.TryParse(dict.GetValueOrDefault("Security:SseRequireAuth"), out var b) && b
             },
-            cors = new { allowedOrigins = allowedOrigins }
+            cors = new { allowedOrigins }
         };
     }
 
     public async Task<int?> GetHeartbeatAsync(CancellationToken ct)
     {
-        var val = await _dal.QueryStringAsync("dbo.sp_Config_GetValue", new SqlParameter("@Key", "Sse:HeartbeatSeconds"));
-        return int.TryParse(val, out var s) ? s : null;
+        var v = await _dal.QueryStringAsync("dbo.sp_Config_GetValue", new SqlParameter("@Key", "Sse:HeartbeatSeconds"));
+        return int.TryParse(v, out var s) ? s : null;
     }
 }
 
+/// <summary>DB-backed CORS with in-memory cache.</summary>
 public sealed class AllowedOriginsProvider
 {
     private readonly ISqlDal _dal;
@@ -312,8 +327,5 @@ public sealed class AllowedOriginsProvider
     }
 
     public async Task<bool> IsAllowedAsync(string origin, CancellationToken ct)
-    {
-        var list = await GetAsync(ct);
-        return list.Contains(origin, StringComparer.OrdinalIgnoreCase);
-    }
+        => (await GetAsync(ct)).Contains(origin, StringComparer.OrdinalIgnoreCase);
 }

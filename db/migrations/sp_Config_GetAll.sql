@@ -1,10 +1,11 @@
-IF OBJECT_ID(N'dbo.sp_Config_GetAll', N'P') IS NOT NULL
-  DROP PROCEDURE dbo.sp_Config_GetAll;
-GO
-CREATE PROCEDURE dbo.sp_Config_GetAll
+/* Returns all non-secret config keys (read-only). */
+SET ANSI_NULLS ON; SET QUOTED_IDENTIFIER ON; GO
+CREATE OR ALTER PROCEDURE dbo.sp_Config_GetAll
 AS
 BEGIN
   SET NOCOUNT ON;
-  SELECT [Key],[Value] FROM dbo.AppConfig WITH (NOLOCK) ORDER BY [Key];
+  SELECT [Key],[Value]
+  FROM dbo.AppConfig WITH (READCOMMITTED)
+  ORDER BY [Key];
 END
 GO

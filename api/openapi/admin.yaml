@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: Technijian MCPX Admin API
+  version: "1.0.0"
+servers:
+  - url: /
+paths:
+  /health:
+    get: { summary: Liveness, responses: { "200": { description: OK } } }
+  /readiness:
+    get: { summary: Readiness, responses: { "200": { description: OK } } }
+  /config/public:
+    get:
+      summary: Public boot config
+      responses:
+        "200":
+          description: Config
+          content:
+            application/json:
+              schema:
+                type: object
+        "204": { description: No content }
+  /config:
+    get:
+      summary: Full non-secret config (read-only)
+      responses: { "200": { description: OK } }
+  /access/allowlist:
+    get:
+      summary: CORS allow-list
+      responses: { "200": { description: OK } }
+  /sessions/stream:
+    get:
+      summary: Server-Sent Events (keepalive)
+      responses: { "200": { description: text/event-stream } }
