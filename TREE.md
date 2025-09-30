@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-09-29T05:27:34Z_
+_Auto-generated on 2025-09-30T18:04:08Z_
 
 ```
 ./
@@ -23,9 +23,19 @@ _Auto-generated on 2025-09-29T05:27:34Z_
 ├── adr/
 │   └── README.md
 ├── api/
+│   ├── .dockerignore
 │   ├── OpenApi/
 │   │   └── mcp-proxy.yaml
-│   └── README.md
+│   ├── README.md
+│   ├── Technijian.MCPX.AdminApi.csproj
+│   ├── dockerfile
+│   └── program.cs
+├── api.tests/
+│   ├── AllowedOriginsProviderTests.cs
+│   ├── Fakes/
+│   │   └── FakeDal.cs
+│   ├── PublicConfigProviderTests.cs
+│   └── Technijian.MCPX.AdminApi.Tests.csproj
 ├── config/
 │   ├── effective/
 │   │   └── expectede-prod.json
@@ -38,13 +48,22 @@ _Auto-generated on 2025-09-29T05:27:34Z_
 │   │   ├── .gitkeep
 │   │   ├── V202509230900__init_schema.sql
 │   │   ├── V202509230905__seed_appconfig_featureflag.sql
-│   │   └── V20250928_2230__baseline.sql
+│   │   ├── V20250928_2230__baseline.sql
+│   │   ├── sp_Config_GetAll.sql
+│   │   ├── sp_Config_GetValue.sql
+│   │   ├── sp_Feature_IsEnabled.sql
+│   │   ├── sp_Lookup_Get.sql
+│   │   └── sp_Security_GetAllowedOrigins.sql
+│   ├── seeds/
+│   │   └── alpha_seed.sql
 │   └── stored_procedures/
 │       ├── .gitkeep
 │       ├── sp_Config_GetAll.sql
 │       ├── sp_Config_GetValue.sql
 │       ├── sp_Feature_IsEnabled.sql
 │       └── sp_Lookup_Get.sql
+├── deploy/
+│   └── docker-compose.yml
 ├── design/
 │   ├── figma/
 │   │   ├── README.md
@@ -244,13 +263,35 @@ _Auto-generated on 2025-09-29T05:27:34Z_
 │   └── web/
 │       └── .gitkeep
 └── web/
+    ├── .dockerignore
     ├── README.md
+    ├── dockerfile
+    ├── index.html
+    ├── nginx.conf
     ├── package.json
-    └── src/
-        ├── index.tsx
-        ├── main.tsx
-        └── styles/
-            └── themebuilder-overrides.css
+    ├── src/
+    │   ├── app.tsx
+    │   ├── components/
+    │   │   ├── sidenav.txt
+    │   │   └── topbar.tsx
+    │   ├── global.d.ts
+    │   ├── index.tsx
+    │   ├── lib/
+    │   │   ├── api.ts
+    │   │   ├── config.ts
+    │   │   ├── msalapp.tsx
+    │   │   └── sse.ts
+    │   ├── main.tsx
+    │   ├── routes/
+    │   │   ├── access.tsx
+    │   │   ├── config.tsx
+    │   │   ├── dashboard.tsx
+    │   │   └── sessions.tsx
+    │   ├── styles/
+    │   │   └── themebuilder-overrides.css
+    │   └── types.ts
+    ├── tsconfig.json
+    └── vite.config.ts
 
-47 directories, 201 files
+54 directories, 235 files
 ```
