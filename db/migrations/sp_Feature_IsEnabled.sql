@@ -1,5 +1,7 @@
-/* Feature toggle check by name. */
-SET ANSI_NULLS ON; SET QUOTED_IDENTIFIER ON; GO
+/* Test a feature flag. */
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+GO
 CREATE OR ALTER PROCEDURE dbo.sp_Feature_IsEnabled
   @Name NVARCHAR(200)
 AS

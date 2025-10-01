@@ -1,75 +1,27 @@
+# Optional: keep this separate spec if you also expose MCP proxy surfaces.
 openapi: 3.0.3
 info:
   title: Technijian MCPX Admin API
   version: "1.0.0"
-servers:
-  - url: /
+servers: [{ url: / }]
 paths:
-  /health:
-    get:
-      summary: Liveness
-      responses:
-        '200': { description: OK }
-  /readiness:
-    get:
-      summary: Readiness (touches DB)
-      responses:
-        '200': { description: Ready }
+  /health: { get: { summary: Liveness, responses: { '200': { description: OK } } } }
+  /readiness: { get: { summary: Readiness, responses: { '200': { description: Ready } } } }
   /config/public:
     get:
-      summary: Public boot config (non-secret)
+      summary: Public boot config
       responses:
-        '200':
-          description: Public config
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  azureAd:
-                    type: object
-                    properties:
-                      tenantId: { type: string }
-                      clientId: { type: string }
-                      redirectUri: { type: string }
-                      scope: { type: string }
-                  sse:
-                    type: object
-                    properties:
-                      heartbeatSeconds: { type: integer }
-                  cors:
-                    type: object
-                    properties:
-                      allowedOrigins:
-                        type: array
-                        items: { type: string }
+        '200': { description: OK }
         '204': { description: No content }
   /config:
     get:
       summary: Non-secret config (read-only)
-      responses:
-        '200':
-          description: All config keys
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  additionalProperties: true
+      responses: { '200': { description: OK } }
   /access/allowlist:
     get:
       summary: Allowed origins (read-only)
-      responses:
-        '200':
-          description: List of origins
-          content:
-            application/json:
-              schema:
-                type: array
-                items: { type: string }
+      responses: { '200': { description: OK } }
   /sessions/stream:
     get:
       summary: Server-Sent Events (keepalive)
-      responses:
-        '200': { description: text/event-stream }
+      responses: { '200': { description: text/event-stream } }

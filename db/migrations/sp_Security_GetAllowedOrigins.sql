@@ -1,10 +1,13 @@
-IF OBJECT_ID(N'dbo.sp_Security_GetAllowedOrigins', N'P') IS NOT NULL
-  DROP PROCEDURE dbo.sp_Security_GetAllowedOrigins;
+/* Return DB-driven CORS allow-list. */
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
 GO
-CREATE PROCEDURE dbo.sp_Security_GetAllowedOrigins
+CREATE OR ALTER PROCEDURE dbo.sp_Security_GetAllowedOrigins
 AS
 BEGIN
   SET NOCOUNT ON;
-  SELECT [Origin] FROM dbo.Security_AllowedOrigin WITH (NOLOCK) ORDER BY [Origin];
+  SELECT [Origin]
+  FROM dbo.Security_AllowedOrigin WITH (READCOMMITTED)
+  ORDER BY [Origin];
 END
 GO

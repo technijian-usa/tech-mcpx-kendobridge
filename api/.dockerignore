@@ -2,5 +2,6 @@
 .github
 bin
 obj
-Dockerfile
 *.user
+*.suo
+*.pdb

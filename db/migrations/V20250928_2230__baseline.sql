@@ -1,4 +1,9 @@
-/* Baseline schema for non-secret runtime config, feature flags, and lookups. */
+/*=====================================================================
+  Baseline schema (idempotent) for non-secret runtime config, feature
+  flags, general lookups, and DB-driven CORS allow-list.
+  - Tables contain NO secrets. Secrets belong in GitHub Env secrets.
+  - Add-only evolution is enforced by Technijian SDLC.
+=====================================================================*/
 SET XACT_ABORT ON;
 BEGIN TRAN;
 

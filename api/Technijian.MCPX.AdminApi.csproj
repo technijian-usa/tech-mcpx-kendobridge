@@ -1,8 +1,8 @@
 <!--
-  ASP.NET Core 8 minimal API for the Admin Portal.
-  - Microsoft.Data.SqlClient: SP-only DAL
-  - JwtBearer: Azure AD auth (Authority/Audience read from DB at boot)
-  - Serilog: optional request logging via appsettings/ENV
+  .NET 8 minimal API project for the Admin portal backend.
+  - Microsoft.Data.SqlClient for SP-only DAL
+  - JwtBearer for Azure AD
+  - Serilog for request logging
 -->
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
