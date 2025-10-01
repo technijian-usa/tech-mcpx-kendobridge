@@ -1,3 +1,29 @@
+# =============================================================================
+# Deploy (Alpha → Beta → RTM → Prod)
+# -----------------------------------------------------------------------------
+# What this workflow does:
+#  - Builds the API + Web Docker images (or you can re-use CI artifacts).
+#  - Pushes images to GHCR (ghcr.io/<owner>/<image>:<tag>).
+#  - Copies docker-compose.yml to the target server over SSH/SCP.
+#  - Logs into GHCR on the server and runs `docker compose up -d`.
+#
+# Requirements (per GitHub Environment: alpha/beta/rtm/prod):
+#  - Secrets:
+#      DEPLOY_HOST         : hostname or IP of the server
+#      DEPLOY_USER         : SSH username
+#      DEPLOY_SSH_KEY      : private key (PEM) with access to the server
+#      DEPLOY_PATH         : absolute path on server, e.g. /opt/mcpx
+#      SQL_CONN_STRING     : full SQL connection string for that environment
+#    Optional:
+#      DEPLOY_PORT         : SSH port (default 22)
+#      GHCR_USERNAME       : override container registry username
+#      GHCR_PAT            : Personal Access Token if not using GITHUB_TOKEN
+#
+# Notes:
+#  - This workflow is manual (workflow_dispatch). You choose environment + tag.
+#  - The server keeps a .env file with SQL_CONN_STRING (written if missing).
+#  - Images are pulled by tag, containers restarted with zero-downtime compose.
+# =============================================================================
 name: Deploy (Alpha→Beta→RTM→Prod)
 
 on:
@@ -9,7 +35,7 @@ on:
         type: choice
         options: [alpha, beta, rtm, prod]
       image_tag:
-        description: "Image tag (default: commit SHA)"
+        description: "Image tag (defaults to commit SHA)"
         required: false
         type: string
 
@@ -24,11 +50,13 @@ env:
 
 jobs:
   build-and-push:
+    name: Build & Push images to GHCR
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.meta.outputs.tag }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Compute tag
         id: meta
@@ -37,14 +65,14 @@ jobs:
           if [ -n "${{ inputs.image_tag }}" ]; then TAG="${{ inputs.image_tag }}"; fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
-      - name: Log in to GHCR
+      - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & push API
+      - name: Build & Push API image
         uses: docker/build-push-action@v6
         with:
           context: ./api
@@ -52,7 +80,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_API }}:${{ steps.meta.outputs.tag }}
 
-      - name: Build & push Web
+      - name: Build & Push Web image
         uses: docker/build-push-action@v6
         with:
           context: ./web
@@ -61,6 +89,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_WEB }}:${{ steps.meta.outputs.tag }}
 
   deploy:
+    name: Remote deploy via SSH
     runs-on: ubuntu-latest
     needs: build-and-push
     environment:
@@ -69,12 +98,16 @@ jobs:
       OWNER: ${{ github.repository_owner }}
       IMAGE_TAG: ${{ needs.build-and-push.outputs.tag }}
     steps:
-      - name: Prepare compose for remote
+      - name: Checkout (for compose templating)
+        uses: actions/checkout@v4
+
+      - name: Prepare docker-compose for remote
         run: |
           mkdir -p out
+          # Replace OWNER and IMAGE_TAG placeholders in compose file
           sed "s/\${OWNER}/${OWNER}/g; s/\${IMAGE_TAG}/${IMAGE_TAG}/g" deploy/docker-compose.yml > out/docker-compose.yml
 
-      - name: Upload compose
+      - name: Upload docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host:     ${{ secrets.DEPLOY_HOST }}
@@ -84,7 +117,7 @@ jobs:
           source:   "out/docker-compose.yml"
           target:   "${{ secrets.DEPLOY_PATH }}/"
 
-      - name: Deploy remotely
+      - name: Deploy remotely (docker compose up -d)
         uses: appleboy/ssh-action@v1.2.0
         env:
           REGISTRY: ${{ env.REGISTRY }}
@@ -99,10 +132,16 @@ jobs:
             set -euo pipefail
             cd "${{ secrets.DEPLOY_PATH }}"
             echo "$PASSWORD" | docker login $REGISTRY -u "$USERNAME" --password-stdin
-            # Optional: create .env per environment with SQL_CONN_STRING
+
+            # Ensure .env exists with SQL_CONN_STRING
             if [ ! -f .env ]; then
               echo "SQL_CONN_STRING=${{ secrets.SQL_CONN_STRING }}" > .env
+              chmod 600 .env
             fi
+
+            # Pull latest images by tag and restart containers
             docker compose pull
             docker compose up -d
+
+            # Cleanup dangling images to conserve space
             docker image prune -f

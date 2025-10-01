@@ -1,14 +1,26 @@
 <!doctype html>
+<!--
+  index.html
+  MCPX Admin Web (React 18 + Vite)
+
+  Notes:
+  - Single HTML shell for the SPA. All CSS comes from the ThemeBuilder package
+    imported in src/main.tsx (no inline styles or external theme links here).
+  - Keep <meta> tags minimal and cache-friendly; JS is injected by Vite.
+-->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"/>
+    <!-- Mobile-friendly viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MCPX Admin</title>
+    <!-- Favicons / manifest can be added later if needed -->
   </head>
   <body>
+    <!-- React mounts here -->
     <div id="root"></div>
+
+    <!-- Vite entry point -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

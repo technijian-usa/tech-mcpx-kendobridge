@@ -1,15 +1,28 @@
+<!--
+  Technijian.MCPX.AdminApi.Tests.csproj
+  Unit test project for the MCPX Admin API.
+  - Uses xUnit + Microsoft.NET.Test.Sdk runner.
+  - References the API project to test providers and DAL contracts.
+-->
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.8.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\api\Technijian.MCPX.AdminApi.csproj" />
   </ItemGroup>
+
 </Project>

@@ -1,18 +1,46 @@
 <!--
-  .NET 8 minimal API project for the Admin portal backend.
-  - Microsoft.Data.SqlClient for SP-only DAL
-  - JwtBearer for Azure AD
-  - Serilog for request logging
+  Technijian.MCPX.AdminApi.csproj
+  ASP.NET Core 8 Web API for the MCPX Admin Portal.
+
+  Notes:
+  - Targets .NET 8 and enables nullable reference types and implicit usings.
+  - References:
+      * Microsoft.Data.SqlClient         -> SP-only DAL access to SQL Server
+      * Microsoft.AspNetCore.Authentication.JwtBearer -> Azure AD JWT auth
+      * Serilog.AspNetCore              -> structured request logging
+  - Keep secrets out of the project; provide connection strings via env vars
+    (e.g., SQL_CONN_STRING) or GitHub Environments.
 -->
+
 <Project Sdk="Microsoft.NET.Sdk.Web">
+
   <PropertyGroup>
+    <!-- Target modern runtime -->
     <TargetFramework>net8.0</TargetFramework>
+
+    <!-- Safer C# defaults -->
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Emit XML docs (useful for API surface docs & analyzers) -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>1591</NoWarn> <!-- suppress missing XML comments warnings -->
   </PropertyGroup>
+
   <ItemGroup>
+    <!-- SQL Server client for SP-only DAL -->
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+
+    <!-- Structured logging (writes via Serilog sinks configured in appsettings/env) -->
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+
+    <!-- Azure AD / JWT bearer auth -->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
   </ItemGroup>
+
+  <!--
+    Optional: if you later add source analyzers (StyleCop, Roslyn analyzers),
+    place them here with PrivateAssets="all" and IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+  -->
+
 </Project>

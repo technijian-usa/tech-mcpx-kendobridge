@@ -1,3 +1,16 @@
+# =============================================================================
+# CI (API + Web + ThemeBuilder guard)
+# -----------------------------------------------------------------------------
+# What this workflow enforces:
+#  1) ThemeBuilder package is committed (package.json + dist assets) and used
+#     as the single source of theme truth in the web app (no base-theme dupes).
+#  2) Web app builds with Node 20 (with/without package-lock.json).
+#  3) API builds and tests on .NET 8.
+#  4) Optional CodeQL security scan on main and PRs.
+# Notes:
+#  - Linux runners are case-sensitive: Dockerfile must be capitalized,
+#    openapi dir should be lowercase (warning).
+# =============================================================================
 name: CI (API + Web + ThemeBuilder guard)
 
 on:
@@ -34,6 +47,7 @@ jobs:
       - name: Install jq (for JSON checks)
         run: sudo apt-get update && sudo apt-get install -y jq
 
+      # Ensure ThemeBuilder package + dist are committed and tracked
       - name: Verify ThemeBuilder export is committed
         shell: bash
         run: |
@@ -50,7 +64,8 @@ jobs:
           git ls-files --error-unmatch "$PKG"  >/dev/null 2>&1 || { echo "::error::ThemeBuilder package.json is not tracked by git"; exit 1; }
           git ls-files --error-unmatch "$CSS"  >/dev/null 2>&1 || { echo "::error::ThemeBuilder dist assets are not tracked by git (check .gitignore)."; exit 1; }
 
-      - name: Check package name is lowercase "${{ env.THEME_PACKAGE_NAME }}"
+      # Package naming must be lowercase "mcpx-kendobridge" to match imports
+      - name: Check theme package name
         shell: bash
         run: |
           set -euo pipefail
@@ -60,6 +75,7 @@ jobs:
             exit 1
           fi
 
+      # Web must depend on the local file: path to the theme package
       - name: Verify Web depends on the local theme package
         shell: bash
         run: |
@@ -67,7 +83,7 @@ jobs:
           WEB_PKG="$WEB_DIR/package.json"
           test -f "$WEB_PKG" || { echo "::error file=$WEB_PKG::Missing $WEB_PKG"; exit 1; }
 
-          echo "Validating JSON in $WEB_PKG"; nl -ba "$WEB_PKG" | sed -n '1,160p'
+          echo "Validating JSON in $WEB_PKG"; nl -ba "$WEB_PKG" | sed -n '1,180p'
           jq . "$WEB_PKG" >/dev/null || { echo "::error file=$WEB_PKG::Invalid JSON (see lines above)."; exit 1; }
 
           DEP=$(jq -r --arg n "${THEME_PACKAGE_NAME}" '.dependencies[$n] // .devDependencies[$n] // empty' "$WEB_PKG")
@@ -80,6 +96,7 @@ jobs:
             exit 1
           fi
 
+      # Web/src must import the theme package and NOT import a base theme directly
       - name: Verify single theme import (no base theme duplicates)
         shell: bash
         run: |
@@ -92,12 +109,13 @@ jobs:
             exit 1
           fi
 
-          # Require at least one import from the ThemeBuilder package anywhere under src
+          # Require at least one import from ThemeBuilder package anywhere under src
           if ! grep -R -nE "${THEME_PACKAGE_NAME}/dist/(scss|css)/" "$WEB_DIR"/src 2>/dev/null; then
             echo "::error::Web app does not import the ThemeBuilder package. Import '${THEME_PACKAGE_NAME}/dist/scss/index.scss' (or CSS) in your entry file."
             exit 1
           fi
 
+      # Ensure expected src structure that your repo uses
       - name: Verify expected web/src structure
         shell: bash
         run: |
@@ -110,21 +128,20 @@ jobs:
               echo "::error ::Missing $WEB_DIR/src/$item"; exit 1
             fi
           done
-          # Optional folder
+          # Optional styles folder
           if [ ! -d "$WEB_DIR/src/styles" ]; then
             echo "::notice ::Optional: $WEB_DIR/src/styles not found (that’s fine if you don’t use local tweaks)."
           fi
 
+      # Case pitfalls on Linux runners
       - name: Case sanity (Linux runners are case-sensitive)
         shell: bash
         run: |
           set -euo pipefail
-          # Dockerfile should be capitalized
           if [ -f "$API_DIR/dockerfile" ]; then
-            echo "::error file=$API_DIR/dockerfile::Rename to 'Dockerfile' (capital D) to build in Linux runners."
+            echo "::error file=$API_DIR/dockerfile::Rename to 'Dockerfile' (capital D) to build on Linux runners."
             exit 1
           fi
-          # Recommend lowercased 'openapi' folder
           if [ -d "$API_DIR/OpenApi" ]; then
             echo "::warning file=$API_DIR/OpenApi::Consider renaming folder to 'openapi' for consistency."
           fi
@@ -154,6 +171,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      # Optional Kendo license activation from secret
       - name: Activate Kendo UI license (optional)
         if: ${{ secrets.KENDO_UI_LICENSE != '' }}
         run: npx --yes kendo-ui-license activate "${KENDO_UI_LICENSE}"

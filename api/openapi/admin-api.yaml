@@ -1,0 +1,150 @@
+openapi: 3.0.3
+
+info:
+  title: Technijian MCPX Admin API
+  version: "1.0.0"
+  description: |
+    Read-only Admin API for the MCPX portal.
+    - Exposes NON-SECRET configuration and a DB-driven CORS allow-list.
+    - Provides a Server-Sent Events (SSE) endpoint for lightweight keepalives.
+    - Auth: Azure AD JWT (scope-based). Some endpoints are public by design.
+
+servers:
+  - url: /
+    description: Same-origin relative base (proxied by nginx in production)
+
+paths:
+  /health:
+    get:
+      summary: Liveness probe
+      description: Returns 200 when the process is alive.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /readiness:
+    get:
+      summary: Readiness probe
+      description: Touches the DB via a safe stored procedure call to confirm readiness.
+      responses:
+        '200':
+          description: Ready
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ready:
+                    type: boolean
+                    example: true
+
+  /config/public:
+    get:
+      summary: Public SPA boot configuration (NON-SECRET)
+      description: |
+        Returns Azure AD identifiers, SSE defaults, and the DB-driven CORS allow-list.
+        Contains only NON-SECRET values safe for client delivery.
+      responses:
+        '200':
+          description: Public config available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConfig'
+        '204':
+          description: No content (no public config is set)
+
+  /config:
+    get:
+      summary: Read-only NON-SECRET key/value configuration
+      description: Returns all AppConfig rows (NON-SECRET). Scope required.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Array of Key/Value pairs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConfigRow'
+        '401':
+          description: Missing/invalid bearer token
+        '403':
+          description: Insufficient scope
+
+  /access/allowlist:
+    get:
+      summary: DB-driven CORS allow-list (read-only)
+      description: Returns the list of allowed origins used by dynamic CORS. Scope required.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Array of origins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uri
+        '401':
+          description: Missing/invalid bearer token
+        '403':
+          description: Insufficient scope
+
+  /sessions/stream:
+    get:
+      summary: Server-Sent Events keepalive stream
+      description: |
+        Emits lightweight `keepalive` events at a cadence configured by `Sse:HeartbeatSeconds`.
+        When `Security:SseRequireAuth=true`, a JWT is required; the SPA appends `?access_token=...`.
+      responses:
+        '200':
+          description: text/event-stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '401':
+          description: Missing/invalid bearer token (when SSE auth is required)
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Azure AD access token (scope-based). The API enforces a required scope configured in the DB.
+
+  schemas:
+    PublicConfig:
+      type: object
+      properties:
+        azureAd:
+          type: object
+          description: Azure AD identifiers for SPA boot (NON-SECRET).
+          properties:
+            tenantId:   { type: string, description: "AAD tenant GUID" }
+            clientId:   { type: string, description: "SPA application (public client) ID" }
+            redirectUri:{ type: string, description: "SPA redirect URI", format: uri }
+            scope:      { type: string, description: "Scope requested by SPA (e.g., Access.Admin)" }
+        sse:
+          type: object
+          properties:
+            heartbeatSeconds: { type: integer, example: 15 }
+            requireAuth:      { type: boolean, example: false }
+        cors:
+          type: object
+          properties:
+            allowedOrigins:
+              type: array
+              items: { type: string, format: uri }

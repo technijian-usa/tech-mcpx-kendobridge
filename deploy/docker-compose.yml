@@ -1,23 +1,53 @@
+# =============================================================================
+# docker-compose.yml
+# Technijian MCPX — local/server composition for Admin API + Admin Web (SPA)
+#
+# What this does
+#  - Runs the ASP.NET Core Admin API (port 5000 in container) and the
+#    React/Vite-built SPA served by nginx (port 80 in container).
+#  - Fronts the API from the SPA container for simple same-origin access.
+#  - Leaves secrets out of source control; SQL_CONN_STRING is read from an
+#    external .env file you keep on the server (or pass via environment).
+#
+# Usage (local)
+#   1) docker compose --env-file ./alpha.env up -d --pull always
+#   2) Browse http://localhost:8080
+#
+# Usage (server)
+#   - Place this file under $DEPLOY_PATH (as done by deploy workflow)
+#   - Create an .env file next to it containing:
+#       SQL_CONN_STRING=Server=...;Database=...;User Id=...;Password=...;TrustServerCertificate=True;
+#   - docker compose pull && docker compose up -d
+#
+# Notes
+#   - Images are expected to be published to GHCR as ghcr.io/<owner>/<image>:<tag>
+#     by the deploy workflow. You can also `build:` locally if preferred.
+# =============================================================================
 version: "3.9"
 
 services:
   api:
+    # Example image name: ghcr.io/acme/mcpx-admin-api:sha-or-tag
     image: ghcr.io/${OWNER}/mcpx-admin-api:${IMAGE_TAG}
     restart: unless-stopped
     environment:
-      - ASPNETCORE_URLS=http://+:5000
+      # Provided at runtime via .env (NOT committed)
       - SQL_CONN_STRING=${SQL_CONN_STRING}
+      # Optional: ASPNETCORE_URLS defaults in the Dockerfile to http://+:5000
     networks: [ mcpx ]
+    # Expose to host for local dev; remove/adjust in server environments
     ports:
-      - "5000:5000"   # optional expose on host; remove on server if behind reverse proxy
+      - "5000:5000"
 
   web:
+    # Example image name: ghcr.io/acme/mcpx-admin-web:sha-or-tag
     image: ghcr.io/${OWNER}/mcpx-admin-web:${IMAGE_TAG}
     restart: unless-stopped
     depends_on: [ api ]
     networks: [ mcpx ]
     ports:
-      - "8080:80"     # web UI on http://server:8080
+      # Host port 8080 -> container port 80 (nginx)
+      - "8080:80"
 
 networks:
   mcpx: {}

@@ -1,7 +1,40 @@
+# .dockerignore (API)
+# Keep API images small and reproducible by excluding dev-only artifacts.
+
+# Git & CI
 .git
 .github
+.gitignore
+
+# Build output
 bin
 obj
+
+# Local env / secrets (never copy into images)
 *.user
 *.suo
-*.pdb
+*.psess
+*.vsp
+*.vspx
+*.pidb
+*.svclog
+*.log
+*.env
+secrets.json
+
+# IDE cruft
+.vscode
+.idea
+*.swp
+*.DS_Store
+Thumbs.db
+
+# Node bits (if any subtools exist)
+node_modules
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
+# Docker bits (only Dockerfile is needed)
+Dockerfile*
+docker-compose*.yml
