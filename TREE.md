@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-10-01T16:52:54Z_
+_Auto-generated on 2025-10-01T19:03:32Z_
 
 ```
 ./
@@ -30,6 +30,7 @@ _Auto-generated on 2025-10-01T16:52:54Z_
 │   ├── Technijian.MCPX.AdminApi.csproj
 │   ├── dockerfile
 │   ├── openapi/
+│   │   ├── admin-api.yaml
 │   │   └── admin.yaml
 │   └── program.cs
 ├── api.tests/
@@ -276,7 +277,7 @@ _Auto-generated on 2025-10-01T16:52:54Z_
     ├── src/
     │   ├── app.tsx
     │   ├── components/
-    │   │   ├── sidenav.txt
+    │   │   ├── sidenav.tsx
     │   │   └── topbar.tsx
     │   ├── global.d.ts
     │   ├── index.tsx
@@ -297,5 +298,5 @@ _Auto-generated on 2025-10-01T16:52:54Z_
     ├── tsconfig.json
     └── vite.config.ts
 
-55 directories, 238 files
+55 directories, 239 files
 ```
