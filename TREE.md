@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-10-01T19:03:32Z_
+_Auto-generated on 2025-10-02T17:49:31Z_
 
 ```
 ./
@@ -28,6 +28,7 @@ _Auto-generated on 2025-10-01T19:03:32Z_
 │   │   └── mcp-proxy.yaml
 │   ├── README.md
 │   ├── Technijian.MCPX.AdminApi.csproj
+│   ├── appsettings.json
 │   ├── dockerfile
 │   ├── openapi/
 │   │   ├── admin-api.yaml
@@ -298,5 +299,5 @@ _Auto-generated on 2025-10-01T19:03:32Z_
     ├── tsconfig.json
     └── vite.config.ts
 
-55 directories, 239 files
+55 directories, 240 files
 ```
