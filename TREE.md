@@ -1,21 +1,9 @@
-# Repository File Index
+# Repository File Tree
 
-_Auto-generated on 2025-10-02T18:04:30Z_
+_Last updated: 2025-10-02 18:48:03 UTC (commit `b49b365`)_
 
-```
+```text
 ./
-├── .github/
-│   ├── CODEOWNERS
-│   ├── CODEOWNERS.docx
-│   ├── pull_request_template.docx
-│   ├── pull_request_template.md
-│   └── workflows/
-│       ├── ci.yml
-│       ├── codeql.yml
-│       ├── deploy.yml
-│       ├── docx-to-md.yml
-│       ├── tree-index.yml
-│       └── validate-themebuilder.yml
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── README.md
@@ -202,9 +190,6 @@ _Auto-generated on 2025-10-02T18:04:30Z_
 │   ├── config_reference.docx
 │   └── error_catalog.docx
 ├── docs-md/
-│   ├── .github/
-│   │   ├── CODEOWNERS.md
-│   │   └── pull_request_template.md
 │   ├── docs/
 │   │   ├── 01_vision.md
 │   │   ├── 02_glossary.md
@@ -299,5 +284,5 @@ _Auto-generated on 2025-10-02T18:04:30Z_
     ├── tsconfig.json
     └── vite.config.ts
 
-55 directories, 240 files
+52 directories, 228 files
 ```
