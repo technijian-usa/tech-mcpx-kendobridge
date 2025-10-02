@@ -1,43 +1,49 @@
-# -----------------------------------------------------------------------------
-# Dockerfile (API)
-# Technijian MCPX Admin API — ASP.NET Core 8 container image
+# =============================================================================
+# Dockerfile (Web)
+# MCPX Admin Web — React 18 (Vite) built and served via nginx
 #
-# Notes
-#  - Multi-stage build: compile/publish in SDK image, run on smaller ASP.NET.
-#  - No secrets are baked into the image. Provide SQL_CONN_STRING at runtime.
-#  - Exposes HTTP on :5000; reverse proxy (nginx) fronts the service in prod.
-# -----------------------------------------------------------------------------
+# REQUIREMENT: Build context must be the REPO ROOT (.)
+#   so we can access both /web and /design/themebuilder/export/mcpx-kendobridge
+#   because package.json depends on the theme via:
+#     "mcpx-kendobridge": "file:../design/themebuilder/export/mcpx-kendobridge"
+#
+# If you *must* keep context=./web, vendor the theme package into /web first,
+# or publish it to a registry and depend on it that way.
+# =============================================================================
 
 # ---------- Build stage -------------------------------------------------------
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+FROM node:20-alpine AS build
+WORKDIR /app
 
-# Restore & cache dependencies first (faster incremental builds)
-COPY Technijian.MCPX.AdminApi.csproj ./
-RUN dotnet restore
+# Copy the ThemeBuilder package first (improves layer caching if web code changes frequently)
+# The path below must exist in the build context (repo root).
+COPY design/themebuilder/export/mcpx-kendobridge /app/design/themebuilder/export/mcpx-kendobridge
 
-# Copy the remaining sources and publish
-COPY . ./
-RUN dotnet publish -c Release -o /app --no-restore
+# Copy only manifests first for better dependency caching
+COPY web/package.json web/package-lock.json* /app/web/
+
+# Install deps (needs the theme package to exist at ../design/...)
+WORKDIR /app/web
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+# Copy the rest of the web sources and build the static site to /app/web/dist
+COPY web /app/web
+RUN npm run build
 
 # ---------- Runtime stage -----------------------------------------------------
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+FROM nginx:alpine
 
-# Set Kestrel binding (HTTP only; TLS terminated by reverse proxy)
-ENV ASPNETCORE_URLS=http://+:5000
+# Replace default server config with our SPA + proxy config
+# (Make sure web/nginx.conf exists in repo)
+COPY web/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Health hints for orchestrators (optional)
-# HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
-#   CMD wget -qO- http://127.0.0.1:5000/health || exit 1
+# Copy the built static files from the build stage
+COPY --from=build /app/web/dist /usr/share/nginx/html
 
-WORKDIR /app
-COPY --from=build /app ./
+# Basic hardening headers for static assets (optional)
+# You can also do this in nginx.conf; keeping image simple is fine.
 
-# API listens on 5000 inside the container
-EXPOSE 5000
+# Expose HTTP (nginx)
+EXPOSE 80
 
-# IMPORTANT: provide SQL_CONN_STRING as an environment variable at runtime.
-# Example (docker compose .env):
-#   SQL_CONN_STRING=Server=...;Database=...;User Id=...;Password=...;TrustServerCertificate=True;
-
-ENTRYPOINT ["dotnet", "Technijian.MCPX.AdminApi.dll"]
+# nginx is the default entrypoint/cmd in this image
