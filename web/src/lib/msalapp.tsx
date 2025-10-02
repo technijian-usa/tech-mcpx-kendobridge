@@ -3,16 +3,16 @@
  * MSAL bootstrapping for Azure AD authentication in the browser.
  *
  * Responsibilities
- *  - Initialize a PublicClientApplication using non-secret settings fetched
+ *  - Initialize a PublicClientApplication using NON-SECRET settings fetched
  *    from the API (/config/public) — no hard-coded IDs in code.
- *  - Ensure a signed-in account exists (redirect flow); silently acquire
+ *  - Ensure a signed-in account exists (redirect flow). Silently acquire
  *    tokens when a scope is configured.
  *  - Expose the MSAL instance + accounts on window so non-React helpers
- *    (e.g., src/lib/api.ts, src/lib/sse.ts) can acquire tokens.
+ *    (src/lib/api.ts, src/lib/sse.ts) can acquire tokens.
  *
  * Security notes
- *  - This SPA never stores secrets. The authority, clientId, redirectUri,
- *    and scope are NON-SECRET identifiers suitable for the client.
+ *  - We never store secrets in the SPA. Authority, clientId, redirectUri,
+ *    and scope are public identifiers suitable for client delivery.
  */
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -57,9 +57,7 @@ export function MsalBoot({
         clientId,
         redirectUri
       },
-      cache: {
-        cacheLocation: 'localStorage' // keeps tokens across reloads
-      }
+      cache: { cacheLocation: 'localStorage' } // persist tokens across reloads
     });
   }, [cfg]);
 
@@ -114,18 +112,15 @@ function MsalGate({
     (async () => {
       const account = accounts[0];
       if (!account) {
-        // Redirect-based login keeps the app simple and secure.
         await instance.loginRedirect({ scopes: scope ? [scope] : [] });
         return;
       }
-
       if (scope) {
         const req: SilentRequest = { account, scopes: [scope] };
         await instance
           .acquireTokenSilent(req)
           .catch(() => instance.loginRedirect(req));
       }
-
       setReady(true);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

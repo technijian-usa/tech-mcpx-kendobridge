@@ -5,11 +5,12 @@
  * Responsibilities
  *  - Provide primary app navigation (Dashboard, Sessions, Config, Access).
  *  - Reflect current route selection.
- *  - Stay stateless (no business logic here).
+ *  - Stay presentational; no business logic beyond routing.
  *
  * Notes
  *  - Uses React Router for navigation; Drawer items map to routes.
- *  - Keep padding/margins modest; ThemeBuilder controls most visuals.
+ *  - Keep inline styles modest; ThemeBuilder controls visual identity.
+ *  - File name is case-sensitive on Linux — keep as SideNav.tsx to match imports.
  */
 
 import React, { useMemo } from 'react';
@@ -29,9 +30,10 @@ export default function SideNav({ children }: { children: React.ReactNode }): JS
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Normalize selection ("/" vs "/route")
-  const selectedKey = useMemo(() => {
+  // Compute which item should be marked selected for the current route.
+  const selectedRoute = useMemo(() => {
     const path = location.pathname || '/';
+    // "/" should only select Dashboard; other paths match by prefix.
     const match = NAV_ITEMS.find(i => (path === '/' ? i.route === '/' : path.startsWith(i.route)));
     return match?.route ?? '/';
   }, [location.pathname]);
@@ -44,16 +46,17 @@ export default function SideNav({ children }: { children: React.ReactNode }): JS
         width={240}
         items={NAV_ITEMS.map((i) => ({
           ...i,
-          selected: i.route === selectedKey
+          selected: i.route === selectedRoute
         }))}
         onSelect={(e) => {
-          const item = (e.itemTarget?.props as Partial<NavItem>) ?? {};
-          if (item.route) navigate(item.route);
+          // Kendo passes the React element via itemTarget.props; we forward to router.
+          const props = (e.itemTarget?.props as Partial<NavItem>) ?? {};
+          if (props.route) navigate(props.route);
         }}
         item={(props) => (
           <DrawerItem
             {...props}
-            // Ensure DrawerItem receives the route prop for onSelect handler
+            // Ensure the route prop is preserved for onSelect above.
             route={(props as any).route}
           >
             {props.item.text}
