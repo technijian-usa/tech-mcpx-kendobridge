@@ -1,6 +1,6 @@
 # Repository File Index
 
-_Auto-generated on 2025-10-02T17:49:31Z_
+_Auto-generated on 2025-10-02T18:01:49Z_
 
 ```
 ./
@@ -24,12 +24,12 @@ _Auto-generated on 2025-10-02T17:49:31Z_
 │   └── README.md
 ├── api/
 │   ├── .dockerignore
+│   ├── Dockerfile
 │   ├── OpenApi/
 │   │   └── mcp-proxy.yaml
 │   ├── README.md
 │   ├── Technijian.MCPX.AdminApi.csproj
 │   ├── appsettings.json
-│   ├── dockerfile
 │   ├── openapi/
 │   │   ├── admin-api.yaml
 │   │   └── admin.yaml
@@ -270,29 +270,29 @@ _Auto-generated on 2025-10-02T17:49:31Z_
 │       └── .gitkeep
 └── web/
     ├── .dockerignore
+    ├── Dockerfile
     ├── README.md
-    ├── dockerfile
     ├── index.html
     ├── nginx.conf
     ├── package.json
     ├── src/
     │   ├── app.tsx
     │   ├── components/
-    │   │   ├── sidenav.tsx
-    │   │   └── topbar.tsx
+    │   │   ├── TopBar.tsx
+    │   │   └── sidenav.tsx
     │   ├── global.d.ts
     │   ├── index.tsx
     │   ├── lib/
     │   │   ├── api.ts
     │   │   ├── config.ts
-    │   │   ├── msalapp.tsx
+    │   │   ├── msalApp.tsx
     │   │   └── sse.ts
     │   ├── main.tsx
     │   ├── routes/
-    │   │   ├── access.tsx
-    │   │   ├── config.tsx
-    │   │   ├── dashboard.tsx
-    │   │   └── sessions.tsx
+    │   │   ├── Access.tsx
+    │   │   ├── Config.tsx
+    │   │   ├── Dashboard.tsx
+    │   │   └── Sessions.tsx
     │   ├── styles/
     │   │   └── themebuilder-overrides.css
     │   └── types.ts
