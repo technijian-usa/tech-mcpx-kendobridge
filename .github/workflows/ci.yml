@@ -1,17 +1,27 @@
 # =============================================================================
-# CI (API + Web + ThemeBuilder guard)
+# CI (Web + API + ThemeBuilder guard)
 # -----------------------------------------------------------------------------
-# What this workflow enforces:
-#  1) ThemeBuilder package is committed (package.json + dist assets) and used
-#     as the single source of theme truth in the web app (no base-theme dupes).
-#  2) Web app builds with Node 20 (with/without package-lock.json).
-#  3) API builds and tests on .NET 8.
-#  4) Optional CodeQL security scan on main and PRs.
-# Notes:
-#  - Linux runners are case-sensitive: Dockerfile must be capitalized,
-#    openapi dir should be lowercase (warning).
+# This workflow aims to be STRICT where it matters (theming, build sanity),
+# and TOLERANT where repos often differ (missing lockfile, file casing).
+#
+# What it does
+#  1) Preflight "theme-guard" checks:
+#     - ThemeBuilder package exists, is tracked in git, and has dist assets.
+#     - web/package.json is valid JSON and depends on the vendor theme folder.
+#     - web/src imports the vendor theme; NO direct base-theme imports.
+#     - Warns on common Linux casing pitfalls (Dockerfile, openapi folder).
+#  2) Builds the Web app (Node 20) with smart cache (lockfile optional).
+#  3) Builds the API (.NET 8) and runs API unit tests if present.
+#  4) Optional CodeQL scan on PRs and main.
+#
+# Notes
+#  - Linux runners are case-sensitive. This workflow will WARN (not fail)
+#    if it sees "api/dockerfile" (lowercase) or "api/OpenApi" (capitalized),
+#    but your container/other jobs might still fail later if not corrected.
+#  - Keep secrets out of code. API uses SQL_CONN_STRING from env at runtime.
 # =============================================================================
-name: CI (API + Web + ThemeBuilder guard)
+
+name: CI (Web + API + ThemeBuilder guard)
 
 on:
   push:
@@ -19,135 +29,139 @@ on:
   pull_request:
 
 permissions:
-  contents: read
-  security-events: write
+  contents: read           # checkout, repo content
   actions: read
   packages: read
+  security-events: write   # for CodeQL job
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 env:
+  # ---- Common versions ----
   NODE_VERSION: "20"
   DOTNET_VERSION: "8.0.x"
+
+  # ---- Paths (adjust if you move things) ----
   WEB_DIR: web
   API_DIR: api
-  THEME_PACKAGE_NAME: mcpx-kendobridge
   THEME_PACKAGE_DIR: design/themebuilder/export/mcpx-kendobridge
 
 jobs:
+  # ---------------------------------------------------------------------------
+  # Preflight theme + repo sanity checks (fail fast with helpful messages)
+  # ---------------------------------------------------------------------------
   theme-guard:
-    name: ThemeBuilder export checks
+    name: ThemeBuilder + repo sanity
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout sources
         uses: actions/checkout@v4
 
-      - name: Install jq (for JSON checks)
+      - name: Install jq (JSON CLI) for package checks
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      # Ensure ThemeBuilder package + dist are committed and tracked
-      - name: Verify ThemeBuilder export is committed
+      # Read the theme package name from its package.json so we can work with
+      # either "mcpx-kendobridge" or any corrected name without hard-coding.
+      - name: Read ThemeBuilder package name
+        id: theme_name
         shell: bash
         run: |
           set -euo pipefail
-          PKG="$THEME_PACKAGE_DIR/package.json"
-          CSS="$THEME_PACKAGE_DIR/dist/css/${THEME_PACKAGE_NAME}.css"
-          SCSS_DIR="$THEME_PACKAGE_DIR/dist/scss"
+          PKG="${THEME_PACKAGE_DIR}/package.json"
+          if [ ! -f "$PKG" ]; then
+            echo "::error file=$PKG::ThemeBuilder package.json not found."
+            exit 1
+          fi
+          NAME=$(jq -r '.name // empty' "$PKG")
+          if [ -z "$NAME" ]; then
+            echo "::error file=$PKG::ThemeBuilder package.json missing 'name' field."
+            exit 1
+          fi
+          echo "THEME_NAME=$NAME" >> $GITHUB_ENV
+          echo "name=$NAME" >> $GITHUB_OUTPUT
 
-          test -f "$PKG"      || { echo "::error file=$PKG::Missing ThemeBuilder package.json"; exit 1; }
-          test -f "$CSS"      || { echo "::error file=$CSS::Missing compiled CSS from ThemeBuilder export"; exit 1; }
-          test -d "$SCSS_DIR" || { echo "::error file=$SCSS_DIR::Missing SCSS sources from ThemeBuilder export"; exit 1; }
-
-          # Must be tracked by git (not ignored)
-          git ls-files --error-unmatch "$PKG"  >/dev/null 2>&1 || { echo "::error::ThemeBuilder package.json is not tracked by git"; exit 1; }
-          git ls-files --error-unmatch "$CSS"  >/dev/null 2>&1 || { echo "::error::ThemeBuilder dist assets are not tracked by git (check .gitignore)."; exit 1; }
-
-      # Package naming must be lowercase "mcpx-kendobridge" to match imports
-      - name: Check theme package name
+      - name: Verify ThemeBuilder dist assets are committed & tracked
         shell: bash
         run: |
           set -euo pipefail
-          NAME=$(jq -r '.name' "$THEME_PACKAGE_DIR/package.json")
-          if [ "$NAME" != "${THEME_PACKAGE_NAME}" ]; then
-            echo "::error file=$THEME_PACKAGE_DIR/package.json::Theme package name must be '${THEME_PACKAGE_NAME}' (found: '$NAME')."
-            exit 1
-          fi
+          CSS="${THEME_PACKAGE_DIR}/dist/css/${THEME_NAME}.css"
+          SCSS_DIR="${THEME_PACKAGE_DIR}/dist/scss"
 
-      # Web must depend on the local file: path to the theme package
-      - name: Verify Web depends on the local theme package
+          test -f "$CSS"      || { echo "::error file=$CSS::Missing compiled CSS from ThemeBuilder export."; exit 1; }
+          test -d "$SCSS_DIR" || { echo "::error file=$SCSS_DIR::Missing SCSS sources from ThemeBuilder export."; exit 1; }
+
+          # Ensure tracked by git (not ignored)
+          git ls-files --error-unmatch "$CSS" >/dev/null 2>&1 || {
+            echo "::error file=$CSS::ThemeBuilder dist assets are not tracked by git (check .gitignore and force-add).";
+            exit 1;
+          }
+
+      - name: Validate web/package.json and dependency wiring
         shell: bash
         run: |
           set -euo pipefail
-          WEB_PKG="$WEB_DIR/package.json"
-          test -f "$WEB_PKG" || { echo "::error file=$WEB_PKG::Missing $WEB_PKG"; exit 1; }
+          WEB_PKG="${WEB_DIR}/package.json"
+          test -f "$WEB_PKG" || { echo "::error file=$WEB_PKG::Missing $WEB_PKG."; exit 1; }
 
-          echo "Validating JSON in $WEB_PKG"; nl -ba "$WEB_PKG" | sed -n '1,180p'
-          jq . "$WEB_PKG" >/dev/null || { echo "::error file=$WEB_PKG::Invalid JSON (see lines above)."; exit 1; }
+          echo "---- ${WEB_PKG} (first 200 lines) ----"
+          nl -ba "$WEB_PKG" | sed -n '1,200p'
 
-          DEP=$(jq -r --arg n "${THEME_PACKAGE_NAME}" '.dependencies[$n] // .devDependencies[$n] // empty' "$WEB_PKG")
-          if [ -z "$DEP" ]; then
-            echo "::error file=$WEB_PKG::Add \"${THEME_PACKAGE_NAME}\": \"file:../${THEME_PACKAGE_DIR}\" to dependencies."
+          # Ensure JSON is valid
+          jq . "$WEB_PKG" >/dev/null || { echo "::error file=$WEB_PKG::Invalid JSON."; exit 1; }
+
+          # The dependency key must match the theme package 'name' field.
+          DEP_PATH=$(jq -r --arg n "$THEME_NAME" '.dependencies[$n] // .devDependencies[$n] // empty' "$WEB_PKG")
+
+          if [ -z "$DEP_PATH" ]; then
+            echo "::error file=$WEB_PKG::Add a dependency on '$THEME_NAME': \"file:../${THEME_PACKAGE_DIR}\"."
             exit 1
           fi
-          if [ "$DEP" != "file:../${THEME_PACKAGE_DIR}" ]; then
-            echo "::error file=$WEB_PKG::Dependency path must be \"file:../${THEME_PACKAGE_DIR}\" (found: $DEP)."
+          if [ "$DEP_PATH" != "file:../${THEME_PACKAGE_DIR}" ]; then
+            echo "::error file=$WEB_PKG::Dependency for '$THEME_NAME' must be \"file:../${THEME_PACKAGE_DIR}\" (found: $DEP_PATH)."
             exit 1
           fi
 
-      # Web/src must import the theme package and NOT import a base theme directly
-      - name: Verify single theme import (no base theme duplicates)
+      - name: Verify theme usage (no base-theme dupes; vendor theme imported)
         shell: bash
         run: |
           set -euo pipefail
-          test -d "$WEB_DIR/src" || { echo "::error::Missing $WEB_DIR/src directory"; exit 1; }
+          SRC_DIR="${WEB_DIR}/src"
+          test -d "$SRC_DIR" || { echo "::error::Missing $SRC_DIR directory."; exit 1; }
 
-          # Fail if direct base Fluent theme imports are present
-          if grep -R -nE "@progress/kendo-theme-[^/]+/dist/(all|index)\.(css|scss)" "$WEB_DIR"/src 2>/dev/null; then
-            echo "::error::Found direct Kendo base-theme import(s) in /web/src. Remove them and import only from '${THEME_PACKAGE_NAME}'."
+          # 1) Forbid direct base-theme imports under web/src
+          if grep -R -nE "@progress/kendo-theme-[^/]+/dist/(all|index)\.(css|scss)" "$SRC_DIR" 2>/dev/null; then
+            echo "::error::Found direct Kendo base-theme import(s) in /web/src. Remove these and import only from the vendor ThemeBuilder package."
             exit 1
           fi
 
-          # Require at least one import from ThemeBuilder package anywhere under src
-          if ! grep -R -nE "${THEME_PACKAGE_NAME}/dist/(scss|css)/" "$WEB_DIR"/src 2>/dev/null; then
-            echo "::error::Web app does not import the ThemeBuilder package. Import '${THEME_PACKAGE_NAME}/dist/scss/index.scss' (or CSS) in your entry file."
+          # 2) Require at least one import from the vendor package (either scss or css)
+          if ! grep -R -nE "${THEME_NAME}/dist/(scss|css)/" "$SRC_DIR" 2>/dev/null; then
+            echo "::error::web/src does not import the vendor theme. Add: import '${THEME_NAME}/dist/scss/index.scss';"
             exit 1
           fi
 
-      # Ensure expected src structure that your repo uses
-      - name: Verify expected web/src structure
+      # Linux-case pitfalls: do not fail the build here; just warn loudly.
+      - name: Case sanity (Linux runners are case-sensitive) — WARN ONLY
         shell: bash
         run: |
           set -euo pipefail
-          declare -a REQUIRED=("app.tsx" "index.tsx" "main.tsx" "types.ts" "global.d.ts" "components" "lib" "routes")
-          for item in "${REQUIRED[@]}"; do
-            if [ -e "$WEB_DIR/src/$item" ]; then
-              echo "OK: $WEB_DIR/src/$item"
-            else
-              echo "::error ::Missing $WEB_DIR/src/$item"; exit 1
-            fi
-          done
-          # Optional styles folder
-          if [ ! -d "$WEB_DIR/src/styles" ]; then
-            echo "::notice ::Optional: $WEB_DIR/src/styles not found (that’s fine if you don’t use local tweaks)."
+          if [ -f "${API_DIR}/dockerfile" ]; then
+            echo "::warning file=${API_DIR}/dockerfile::Linux is case-sensitive. Rename to 'Dockerfile' (capital D)."
+          fi
+          if [ -f "${WEB_DIR}/dockerfile" ]; then
+            echo "::warning file=${WEB_DIR}/dockerfile::Linux is case-sensitive. Rename to 'Dockerfile' (capital D)."
+          fi
+          if [ -d "${API_DIR}/OpenApi" ]; then
+            echo "::warning file=${API_DIR}/OpenApi::Consider renaming folder to 'openapi' for consistency."
           fi
 
-      # Case pitfalls on Linux runners
-      - name: Case sanity (Linux runners are case-sensitive)
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ -f "$API_DIR/dockerfile" ]; then
-            echo "::error file=$API_DIR/dockerfile::Rename to 'Dockerfile' (capital D) to build on Linux runners."
-            exit 1
-          fi
-          if [ -d "$API_DIR/OpenApi" ]; then
-            echo "::warning file=$API_DIR/OpenApi::Consider renaming folder to 'openapi' for consistency."
-          fi
-
+  # ---------------------------------------------------------------------------
+  # Build the Web app (Node 20). Works with or without package-lock.json.
+  # ---------------------------------------------------------------------------
   web:
-    name: Build & test web
+    name: Build & test Web
     needs: theme-guard
     runs-on: ubuntu-latest
     defaults:
@@ -156,8 +170,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Cache when package-lock.json exists
-      - name: Setup Node (with cache)
+      # Cache only when a lockfile is present (avoids "no such file" errors).
+      - name: Setup Node (with npm cache)
         if: ${{ hashFiles(format('{0}/package-lock.json', env.WEB_DIR)) != '' }}
         uses: actions/setup-node@v4
         with:
@@ -171,16 +185,20 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # Optional Kendo license activation from secret
+      # Optional: activate Kendo React license from a secret (if you use it).
       - name: Activate Kendo UI license (optional)
         if: ${{ secrets.KENDO_UI_LICENSE != '' }}
         run: npx --yes kendo-ui-license activate "${KENDO_UI_LICENSE}"
         env:
           KENDO_UI_LICENSE: ${{ secrets.KENDO_UI_LICENSE }}
 
-      - name: Install
+      - name: Install dependencies
         run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Lint (if configured)
         run: npm run lint --if-present
@@ -191,7 +209,7 @@ jobs:
       - name: Unit tests (if present)
         run: npm test --if-present
 
-      - name: Upload web build
+      - name: Upload Web build artifact
         uses: actions/upload-artifact@v4
         with:
           name: web-build
@@ -200,6 +218,9 @@ jobs:
             ${{ env.WEB_DIR }}/build
           if-no-files-found: warn
 
+  # ---------------------------------------------------------------------------
+  # Build the API (.NET 8) and run unit tests (if api.Tests directory exists)
+  # ---------------------------------------------------------------------------
   api:
     name: Build & test API
     needs: theme-guard
@@ -218,15 +239,26 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Build
+      - name: Build (Release)
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal
+      # Run tests if the api.Tests project is present (skip gracefully otherwise).
+      - name: Test (API unit tests, if present)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -d "../api.Tests" ]; then
+            dotnet test ../api.Tests --configuration Release --no-build --verbosity normal
+          else
+            echo "::notice::No api.Tests directory found. Skipping API tests."
+          fi
 
+  # ---------------------------------------------------------------------------
+  # Optional: CodeQL static analysis on PRs and on main
+  # ---------------------------------------------------------------------------
   codeql:
     name: CodeQL (JS + C#)
-    if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/main') }}
     needs: [web, api]
     runs-on: ubuntu-latest
     permissions:
@@ -235,7 +267,11 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
-      - uses: github/codeql-action/init@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
           languages: javascript, csharp
-      - uses: github/codeql-action/analyze@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

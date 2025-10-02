@@ -1,39 +1,147 @@
-name: Validate ThemeBuilder vendor
+# =============================================================================
+# validate-themebuilder.yml
+# -----------------------------------------------------------------------------
+# Purpose
+#   Guardrails for ThemeBuilder usage and wiring in the web app.
+#   - Ensures the vendor theme package exists with dist assets and is tracked.
+#   - Ensures web/package.json depends on the vendor package via a local path.
+#   - Ensures web/src imports the vendor package (and NOT a base theme).
+#   - Emits WARNINGS for common Linux casing pitfalls (Dockerfile, OpenApi).
+#
+# When it runs
+#   - On PRs that touch the theme export or web app.
+#   - On pushes to main/develop (so errors are caught even without PRs).
+# =============================================================================
+
+name: Validate ThemeBuilder
 
 on:
-  push:
-    paths:
-      - 'design/themebuilder/**'
-      - '.github/workflows/validate-themebuilder.yml'
-      - 'scripts/validate-themebuilder.sh'
   pull_request:
+    branches: [ main, develop ]
     paths:
       - 'design/themebuilder/**'
+      - 'web/**'
       - '.github/workflows/validate-themebuilder.yml'
-      - 'scripts/validate-themebuilder.sh'
-  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'design/themebuilder/**'
+      - 'web/**'
+      - '.github/workflows/validate-themebuilder.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: validate-themebuilder-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  WEB_DIR: web
+  THEME_PACKAGE_DIR: design/themebuilder/export/mcpx-kendobridge
 
 jobs:
-  validate:
+  theme-checks:
+    name: ThemeBuilder export & wiring checks
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      # Convert CRLF -> LF in CI in case the script was committed with Windows endings
-      - name: Ensure LF line endings for script
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install jq (JSON CLI)
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      # Read the vendor theme package name (so we don't hard-code it).
+      - name: Read ThemeBuilder package name
+        id: theme_name
+        shell: bash
         run: |
-          if grep -q $'\r' scripts/validate-themebuilder.sh; then
-            echo "::warning::Converting CRLF to LF in scripts/validate-themebuilder.sh"
-            sed -i 's/\r$//' scripts/validate-themebuilder.sh
+          set -euo pipefail
+          PKG="${THEME_PACKAGE_DIR}/package.json"
+          if [ ! -f "$PKG" ]; then
+            echo "::error file=$PKG::ThemeBuilder package.json not found."
+            exit 1
+          fi
+          NAME=$(jq -r '.name // empty' "$PKG")
+          if [ -z "$NAME" ]; then
+            echo "::error file=$PKG::ThemeBuilder package.json missing 'name'."
+            exit 1
+          fi
+          echo "THEME_NAME=$NAME" >> $GITHUB_ENV
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      # Verify CSS/SCSS exist and are tracked by git (not ignored).
+      - name: Verify dist assets exist and are tracked
+        shell: bash
+        run: |
+          set -euo pipefail
+          CSS="${THEME_PACKAGE_DIR}/dist/css/${THEME_NAME}.css"
+          SCSS_DIR="${THEME_PACKAGE_DIR}/dist/scss"
+
+          test -f "$CSS"      || { echo "::error file=$CSS::Missing compiled CSS from ThemeBuilder export."; exit 1; }
+          test -d "$SCSS_DIR" || { echo "::error file=$SCSS_DIR::Missing SCSS sources from ThemeBuilder export."; exit 1; }
+
+          # Ensure tracked by git (not ignored)
+          git ls-files --error-unmatch "$CSS" >/dev/null 2>&1 || {
+            echo "::error file=$CSS::ThemeBuilder dist assets are not tracked by git (check .gitignore; force-add if needed).";
+            exit 1;
+          }
+
+      # Ensure web/package.json is valid JSON and depends on the vendor package via local path.
+      - name: Validate web/package.json dependency path
+        shell: bash
+        run: |
+          set -euo pipefail
+          WEB_PKG="${WEB_DIR}/package.json"
+          test -f "$WEB_PKG" || { echo "::error file=$WEB_PKG::Missing $WEB_PKG."; exit 1; }
+
+          echo "---- ${WEB_PKG} (first 200 lines) ----"
+          nl -ba "$WEB_PKG" | sed -n '1,200p'
+          jq . "$WEB_PKG" >/dev/null || { echo "::error file=$WEB_PKG::Invalid JSON."; exit 1; }
+
+          DEP_PATH=$(jq -r --arg n "$THEME_NAME" '.dependencies[$n] // .devDependencies[$n] // empty' "$WEB_PKG")
+          if [ -z "$DEP_PATH" ]; then
+            echo "::error file=$WEB_PKG::Add a dependency on '$THEME_NAME': \"file:../${THEME_PACKAGE_DIR}\"."
+            exit 1
+          fi
+          if [ "$DEP_PATH" != "file:../${THEME_PACKAGE_DIR}" ]; then
+            echo "::error file=$WEB_PKG::Dependency for '$THEME_NAME' must be \"file:../${THEME_PACKAGE_DIR}\" (found: $DEP_PATH)."
+            exit 1
           fi
 
-      - name: Make script executable
-        run: chmod +x scripts/validate-themebuilder.sh
+      # Ensure web/src uses the vendor theme and does NOT import a base theme directly.
+      - name: Verify theme import usage under web/src
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC_DIR="${WEB_DIR}/src"
+          test -d "$SRC_DIR" || { echo "::error::Missing $SRC_DIR directory."; exit 1; }
 
-      - name: Bash syntax check
-        run: bash -n scripts/validate-themebuilder.sh
+          # No direct base-theme imports
+          if grep -R -nE "@progress/kendo-theme-[^/]+/dist/(all|index)\.(css|scss)" "$SRC_DIR" 2>/dev/null; then
+            echo "::error::Found direct Kendo base-theme import(s) under /web/src. Import ONLY from '${THEME_NAME}'."
+            exit 1
+          fi
 
-      - name: Validate vendored ThemeBuilder packages
-        run: ./scripts/validate-themebuilder.sh
+          # Require an import from the vendor theme
+          if ! grep -R -nE "${THEME_NAME}/dist/(scss|css)/" "$SRC_DIR" 2>/dev/null; then
+            echo "::error::No import from vendor theme detected. Add: import '${THEME_NAME}/dist/scss/index.scss';"
+            exit 1
+          fi
+
+      # Warn (do not fail) on common Linux-case traps.
+      - name: Case sanity — WARN ONLY
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f "api/dockerfile" ]; then
+            echo "::warning file=api/dockerfile::Linux is case-sensitive. Rename to 'Dockerfile' (capital D)."
+          fi
+          if [ -f "web/dockerfile" ]; then
+            echo "::warning file=web/dockerfile::Linux is case-sensitive. Rename to 'Dockerfile' (capital D)."
+          fi
+          if [ -d "api/OpenApi" ]; then
+            echo "::warning file=api/OpenApi::Consider renaming folder to 'openapi' for consistency."
+          fi

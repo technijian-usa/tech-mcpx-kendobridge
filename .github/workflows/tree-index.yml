@@ -1,33 +1,107 @@
-name: Repo Tree Index
+# =============================================================================
+# tree-index.yml
+# -----------------------------------------------------------------------------
+# Purpose
+#   Generate/refresh a readable repository file tree in TREE.md at the repo
+#   root so reviewers can quickly see structure without pulling the repo.
+#
+# Highlights
+#   - Ignores heavy/irrelevant folders (node_modules, dist, bin/obj, _media, .git).
+#   - Works on Linux runners (Ubuntu) by installing the `tree` utility.
+#   - Commits TREE.md only when the content actually changes.
+#   - Safe to run manually, on PRs, and on pushes to main/develop.
+# =============================================================================
+
+name: Repository file tree index
 
 on:
-  push:
-    branches: [ "**" ]
   workflow_dispatch: {}
+  push:
+    branches: [ main, develop ]
+    # Run on most changes, but ignore common noise
+    paths-ignore:
+      - '**/*.png'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.gif'
+      - '**/*.svg'
+      - 'docs-md/_media/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**/*.png'
+      - '**/*.jpg'
+      - '**/*.jpeg'
+      - '**/*.gif'
+      - '**/*.svg'
+      - 'docs-md/_media/**'
+
+permissions:
+  contents: write   # needed to commit TREE.md updates
+  actions: read
+
+concurrency:
+  group: tree-index-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-tree:
+  build-index:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout (full history so diffs work)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install `tree`
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tree
 
       - name: Generate TREE.md
+        id: gen
         shell: bash
         run: |
-          sudo apt-get update && sudo apt-get install -y tree
+          set -euo pipefail
+
+          # Compose an ignore pattern for `tree -I` (EGREP-style).
+          # We skip heavy/derived/hidden areas to keep output readable.
+          IGNORE='\.git|\.github|node_modules|dist|bin|obj|__pycache__|\.venv|Thumbs\.db|\.DS_Store|_media'
+
+          SHA="$(git rev-parse --short HEAD)"
+          NOW="$(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+
           {
-            echo "# Repository File Index"
+            echo "# Repository File Tree"
             echo
-            echo "_Auto-generated on $(date -u +"%Y-%m-%dT%H:%M:%SZ")_"
+            echo "_Last updated: ${NOW} (commit \`${SHA}\`)_"
             echo
-            echo '```'
-            # Hide typical noise; keep adjust as you like
-            tree -a -I "node_modules|.git|dist|bin|obj|.DS_Store|*.lock" -F
+            echo '```text'
+            # -a: show dotfiles (still filtered by -I)
+            # -F: append "/" to directories for clarity
+            # -n: print filenames without escaping
+            # -I: ignore pattern (folders or globs separated by "|")
+            tree -a -F -n -I "$IGNORE"
             echo '```'
           } > TREE.md
 
-      - name: Commit TREE.md
+          # Detect if TREE.md content actually changed
+          if git diff --quiet -- TREE.md; then
+            echo "changed=0" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit updated TREE.md (if changed)
+        if: ${{ steps.gen.outputs.changed == '1' }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(repo): refresh TREE.md"
+          commit_message: "chore: refresh TREE.md"
           file_pattern: TREE.md
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: No changes detected
+        if: ${{ steps.gen.outputs.changed != '1' }}
+        run: ec

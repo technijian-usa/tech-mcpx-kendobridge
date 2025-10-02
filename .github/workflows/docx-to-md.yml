@@ -1,25 +1,49 @@
-name: DocX to Markdown mirror (repo-wide)
+# =============================================================================
+# docx-to-md.yml
+# -----------------------------------------------------------------------------
+# Purpose
+#   Convert EVERY tracked *.docx anywhere in the repo into GitHub-flavored
+#   Markdown and mirror the original folder structure under /docs-md/.
+#   Images embedded in DOCX are extracted alongside each MD file under
+#   /docs-md/_media/<relative-docx-path>/.
+#
+# Why this version?
+#   - Works across ALL subdirectories (not just /docs).
+#   - Uses pandoc for high-quality DOCX→GFM conversion.
+#   - Commits only when changes are produced.
+#   - Resilient to paths with spaces; uses -z (NUL-separated) enumerations.
+# =============================================================================
+
+name: DOCX → Markdown sync
 
 on:
+  workflow_dispatch: {}
   push:
-    # Mirror on any .docx change anywhere in the repo
+    branches: [ main, develop ]
     paths:
       - '**/*.docx'
       - '.github/workflows/docx-to-md.yml'
-  workflow_dispatch: {}
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - '**/*.docx'
+      - '.github/workflows/docx-to-md.yml'
 
 permissions:
-  contents: write
+  contents: write   # needed to commit docs-md updates
+  actions: read
 
 concurrency:
-  group: docx-to-md
+  group: docx-to-md-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   convert:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout (full history so we can compare/commit)
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -28,41 +52,51 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc
 
-      - name: Convert .docx → .md into docs-md/ (preserve subpaths)
+      - name: Convert *.docx → docs-md/*.md (mirroring folders)
+        id: convert
         shell: bash
         run: |
           set -euo pipefail
-          shopt -s globstar nullglob
 
-          # Create target root
-          mkdir -p docs-md
+          # Track whether we produced any output to decide on committing.
+          changed=0
 
-          # Find all tracked .docx files outside docs-md/ and .git/
-          mapfile -t DOCX < <(find . -type f \( -iname '*.docx' \) \
-            -not -path './docs-md/*' -not -path './.git/*' | sort)
+          # Cleanly enumerate tracked DOCX files (NUL-separated, handles spaces)
+          while IFS= read -r -d '' src; do
+            # src is a path like: docs/specs/08_UI_UX.docx
+            rel="${src%.docx}"                                 # docs/specs/08_UI_UX
+            out="docs-md/${rel}.md"                            # docs-md/docs/specs/08_UI_UX.md
+            media_dir="docs-md/_media/${rel}"                  # docs-md/_media/docs/specs/08_UI_UX/
 
-          # Convert each .docx to parallel docs-md/<path>.md
-          for f in "${DOCX[@]}"; do
-            rel="${f#./}"
-            out="docs-md/${rel%.docx}.md"
-            mkdir -p "$(dirname "$out")"
-            pandoc "$f" -f docx -t gfm --wrap=none -o "$out"
-            # Prepend source reference header
-            printf "> _Source: %s_\n\n" "$rel" | cat - "$out" > "$out.tmp" && mv "$out.tmp" "$out"
-          done
+            mkdir -p "$(dirname "$out")" "$media_dir"
 
-          # Remove orphaned mirrors (no corresponding .docx anymore)
-          mapfile -t MD < <(find docs-md -type f -iname '*.md' | sort)
-          for m in "${MD[@]}"; do
-            rel="${m#docs-md/}"
-            src="${rel%.md}.docx"
-            if [[ ! -f "$src" ]]; then
-              rm -f "$m"
-            fi
-          done
+            # Convert with GitHub-flavored Markdown, ATX headings, no hard wraps.
+            # Extract embedded media into a stable, file-scoped media folder.
+            pandoc \
+              --from=docx+smart \
+              --to=gfm+pipe_tables+raw_html \
+              --wrap=none \
+              --markdown-headings=atx \
+              --extract-media="$media_dir" \
+              -o "$out" "$src"
 
-      - name: Commit Markdown mirrors
+            # Normalize line endings and trim trailing spaces for clean diffs.
+            awk 'sub(/[ \t\r]+$/, ""){print; next} {print}' "$out" > "$out.tmp" && mv "$out.tmp" "$out"
+
+            changed=1
+          done < <(git ls-files -z '**/*.docx')
+
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+      - name: Commit updated Markdown (if any)
+        if: ${{ steps.convert.outputs.changed == '1' }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore(docs-md): mirror .docx → .md repo-wide"
+          commit_message: "docs(md): sync *.docx → docs-md/ via pandoc"
           file_pattern: docs-md/**
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: No changes detected
+        if: ${{ steps.convert.outputs.changed != '1' }}
+        run: echo "No DOCX changes detected; skipping commit."

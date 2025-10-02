@@ -1,28 +1,25 @@
 # =============================================================================
 # Deploy (Alpha → Beta → RTM → Prod)
 # -----------------------------------------------------------------------------
-# What this workflow does:
-#  - Builds the API + Web Docker images (or you can re-use CI artifacts).
-#  - Pushes images to GHCR (ghcr.io/<owner>/<image>:<tag>).
-#  - Copies docker-compose.yml to the target server over SSH/SCP.
-#  - Logs into GHCR on the server and runs `docker compose up -d`.
+# What this does
+#  1) Builds Docker images for API and Web.
+#  2) Pushes them to GHCR (ghcr.io/<owner>/<image>:<tag>).
+#  3) Copies docker-compose.yml to a remote server via SSH/SCP.
+#  4) Logs in to GHCR on the server and runs `docker compose up -d`.
 #
-# Requirements (per GitHub Environment: alpha/beta/rtm/prod):
-#  - Secrets:
-#      DEPLOY_HOST         : hostname or IP of the server
-#      DEPLOY_USER         : SSH username
-#      DEPLOY_SSH_KEY      : private key (PEM) with access to the server
-#      DEPLOY_PATH         : absolute path on server, e.g. /opt/mcpx
-#      SQL_CONN_STRING     : full SQL connection string for that environment
+# IMPORTANT
+#  - Web image build uses the REPO ROOT as context and Dockerfile at web/Dockerfile
+#    since the web package depends on a local ThemeBuilder folder outside /web.
+#  - Per-environment secrets (set under GitHub Environments: alpha/beta/rtm/prod):
+#      DEPLOY_HOST         : hostname/IP of target server
+#      DEPLOY_USER         : SSH user
+#      DEPLOY_SSH_KEY      : private key (PEM) with access to server
+#      DEPLOY_PATH         : absolute path on server (e.g., /opt/mcpx)
+#      SQL_CONN_STRING     : full SQL Server connection string for that env
 #    Optional:
 #      DEPLOY_PORT         : SSH port (default 22)
-#      GHCR_USERNAME       : override container registry username
-#      GHCR_PAT            : Personal Access Token if not using GITHUB_TOKEN
-#
-# Notes:
-#  - This workflow is manual (workflow_dispatch). You choose environment + tag.
-#  - The server keeps a .env file with SQL_CONN_STRING (written if missing).
-#  - Images are pulled by tag, containers restarted with zero-downtime compose.
+#      GHCR_USERNAME       : override registry username (defaults to github.actor)
+#      GHCR_PAT            : PAT for GHCR (defaults to GITHUB_TOKEN)
 # =============================================================================
 name: Deploy (Alpha→Beta→RTM→Prod)
 
@@ -42,6 +39,10 @@ on:
 permissions:
   contents: read
   packages: write
+
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: true
 
 env:
   REGISTRY: ghcr.io
@@ -72,6 +73,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # ------------------ API image ------------------
       - name: Build & Push API image
         uses: docker/build-push-action@v6
         with:
@@ -80,10 +82,14 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_API }}:${{ steps.meta.outputs.tag }}
 
+      # ------------------ Web image ------------------
+      # NOTE: context is REPO ROOT (.) and we point to web/Dockerfile explicitly.
+      # This is required because the web package depends on ../design/themebuilder.
       - name: Build & Push Web image
         uses: docker/build-push-action@v6
         with:
-          context: ./web
+          context: .
+          file: web/Dockerfile
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_WEB }}:${{ steps.meta.outputs.tag }}
@@ -100,6 +106,21 @@ jobs:
     steps:
       - name: Checkout (for compose templating)
         uses: actions/checkout@v4
+
+      - name: Validate required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=()
+          for key in DEPLOY_HOST DEPLOY_USER DEPLOY_SSH_KEY DEPLOY_PATH SQL_CONN_STRING; do
+            if [ -z "${{ secrets[format('{0}', key)] || '' }}" ]; then
+              missing+=("$key")
+            fi
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing required secrets: ${missing[*]}"
+            exit 1
+          fi
 
       - name: Prepare docker-compose for remote
         run: |
@@ -131,9 +152,10 @@ jobs:
           script: |
             set -euo pipefail
             cd "${{ secrets.DEPLOY_PATH }}"
+
             echo "$PASSWORD" | docker login $REGISTRY -u "$USERNAME" --password-stdin
 
-            # Ensure .env exists with SQL_CONN_STRING
+            # Ensure .env exists with SQL_CONN_STRING (one-time)
             if [ ! -f .env ]; then
               echo "SQL_CONN_STRING=${{ secrets.SQL_CONN_STRING }}" > .env
               chmod 600 .env
@@ -143,5 +165,5 @@ jobs:
             docker compose pull
             docker compose up -d
 
-            # Cleanup dangling images to conserve space
+            # Optional cleanup to save space
             docker image prune -f
